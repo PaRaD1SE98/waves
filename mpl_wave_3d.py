@@ -84,7 +84,7 @@ freq_slider = Slider(
     ax=ax_freq,
     label='Frequency [Hz]',
     valmin=0,
-    valmax=100,
+    valmax=fft_wave2.shape[2],
     valinit=0,
 )
 
@@ -95,4 +95,46 @@ def update(val):
 
 
 freq_slider.on_changed(update)
+plt.show()
+
+fig4 = plt.figure()
+ax = fig4.add_subplot()
+image_fft_kx = ax.imshow(fft_wave2[0, :, :].T, cmap='viridis')
+ax_kx = plt.axes([0.20, 0.01, 0.65, 0.03])
+kx_slider = Slider(
+    ax=ax_kx,
+    label='kx',
+    valmin=0,
+    valmax=fft_wave2.shape[0],
+    valinit=0,
+)
+
+
+def update_kx(val):
+    ax.imshow(fft_wave2[int(val), :, :].T, cmap='viridis')
+    fig4.canvas.draw_idle()
+
+
+kx_slider.on_changed(update_kx)
+plt.show()
+
+fig5 = plt.figure()
+ax = fig5.add_subplot()
+image_fft_ky = ax.imshow(fft_wave2[:, 0, :].T, cmap='viridis')
+ax_ky = plt.axes([0.20, 0.01, 0.65, 0.03])
+kx_slider = Slider(
+    ax=ax_ky,
+    label='ky',
+    valmin=0,
+    valmax=fft_wave2.shape[1],
+    valinit=0,
+)
+
+
+def update_ky(val):
+    ax.imshow(fft_wave2[int(val), :, :].T, cmap='viridis')
+    fig5.canvas.draw_idle()
+
+
+kx_slider.on_changed(update_ky)
 plt.show()
