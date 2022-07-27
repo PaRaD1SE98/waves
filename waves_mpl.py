@@ -62,7 +62,7 @@ print('Kys', Kys)
 X = np.arange(0, x_max, 1 / Kxs)
 Y = np.arange(0, y_max, 1 / Kys)
 T = np.arange(0, t_max, 1 / Fs)
-x, y = np.meshgrid(X, Y)
+x, y = np.meshgrid(X, Y, indexing='ij')
 z = np.zeros((len(X), len(Y), len(T)))
 
 for i, t in enumerate(T):
@@ -118,88 +118,100 @@ KX = np.linspace(*Kx_range, resolution_x)
 KY = np.linspace(*Ky_range, resolution_y)
 FREQ = np.linspace(*F_range, resolution_t)
 
-fft_wave2 = np.abs(np.fft.fftshift(np.fft.fftn(z), axes=(0, 1)))
+fft_result = np.abs(np.fft.fftshift(np.fft.fftn(z), axes=(0, 1)))
+
 fig3 = plt.figure()
 ax = fig3.add_subplot()
 ax.set_xlabel('Kx')
 ax.set_ylabel('Ky')
-Kx, Ky = np.meshgrid(KX, KY)
-image_fft = ax.pcolormesh(Kx, Ky, fft_wave2[:, :, 0], cmap='viridis')
+Kx, Ky = np.meshgrid(KX, KY, indexing='ij')
+img_kx_ky = ax.pcolormesh(Kx, Ky, fft_result[:, :, 0], cmap='viridis')
 ax.set_aspect(Kxs / Kys)
-plt.colorbar(image_fft, label='Amplitude')
+plt.colorbar(img_kx_ky, label='Amplitude')
 plt.subplots_adjust(bottom=0.25)
-ax_freq = plt.axes([0.20, 0.05, 0.65, 0.06])
+space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
 freq_slider = Slider(
-    ax=ax_freq,
-    label='Frequency [Hz]',
+    ax=space_slider,
+    label='Freq',
     valmin=0,
     valmax=Fs / 2,
     valinit=0,
-    valstep=Fs / 2 / 100,
+    valstep=Fs / 2 / resolution_t,
 )
 
 
 def update(val):
-    ax.pcolormesh(Kx, Ky, fft_wave2[:, :, int(val * resolution_t / (Fs / 2)) - 1], cmap='viridis')
+    ax.pcolormesh(Kx, Ky, fft_result[:, :, int(val * resolution_t / (Fs / 2)) - 1], cmap='viridis')
     fig3.canvas.draw_idle()
 
 
 freq_slider.on_changed(update)
 plt.show()
 
-fft_wave2 = np.abs(np.fft.fftn(z))
+
+def val_to_idx(v, res, ks):
+    """
+    slide value of kx or ky to ndarray index
+    :param v: slide value
+    :param res: resolution of axis
+    :param ks: sampling spatial frequency
+    :rtype: int
+    """
+    return int(v * (res / (ks / 2)) + res / 2) - 1
+
+
 fig4 = plt.figure()
 ax = fig4.add_subplot()
-ax.set_xlabel('Ky')
-ax.set_ylabel('Freq')
-Ky, Freq = np.meshgrid(KY, FREQ)
-image_fft_kx = ax.pcolormesh(Ky, Freq, fft_wave2[0, :, :].T, cmap='viridis')
-ax.set_aspect(Kys / Fs)
-plt.colorbar(image_fft_kx, label='Amplitude')
-plt.subplots_adjust(bottom=0.25)
-ax_kx = plt.axes([0.20, 0.05, 0.65, 0.06])
-kx_slider = Slider(
-    ax=ax_kx,
-    label='kx',
-    valmin=-Kxs / 4,
-    valmax=Kxs / 4,
-    valinit=0,
-    valstep=Kxs / 2 / 100,
-)
-
-
-def update_kx(val):
-    ax.pcolormesh(Ky, Freq, fft_wave2[int(val * resolution_x / (Kxs / 2)) - 1, :, :].T, cmap='viridis')
-    fig4.canvas.draw_idle()
-
-
-kx_slider.on_changed(update_kx)
-plt.show()
-
-fig5 = plt.figure()
-ax = fig5.add_subplot()
 ax.set_xlabel('Kx')
 ax.set_ylabel('Freq')
-Kx, Freq = np.meshgrid(KX, FREQ)
-image_fft_ky = ax.pcolormesh(Kx, Freq, fft_wave2[:, 0, :].T, cmap='viridis')
+Kx, Freq = np.meshgrid(KX, FREQ, indexing='ij')
+img_kx_f = ax.pcolormesh(Kx, Freq, fft_result[:, val_to_idx(0, resolution_y, Kys), :], cmap='viridis')
 ax.set_aspect(Kxs / Fs)
-plt.colorbar(image_fft_ky, label='Amplitude')
+plt.colorbar(img_kx_f, label='Amplitude')
 plt.subplots_adjust(bottom=0.25)
-ax_ky = plt.axes([0.20, 0.05, 0.65, 0.06])
-kx_slider = Slider(
-    ax=ax_ky,
+space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
+ky_slider = Slider(
+    ax=space_slider,
     label='ky',
     valmin=-Kys / 4,
     valmax=Kys / 4,
     valinit=0,
-    valstep=Kys / 2 / 100,
+    valstep=Kys / 2 / resolution_y,
 )
 
 
 def update_ky(val):
-    ax.pcolormesh(Kx, Freq, fft_wave2[:, int(val * resolution_y / (Kys / 2)) - 1, :].T, cmap='viridis')
+    ax.pcolormesh(Kx, Freq, fft_result[:, val_to_idx(val, resolution_y, Kys), :], cmap='viridis')
+    fig4.canvas.draw_idle()
+
+
+ky_slider.on_changed(update_ky)
+plt.show()
+
+fig5 = plt.figure()
+ax = fig5.add_subplot()
+ax.set_xlabel('Ky')
+ax.set_ylabel('Freq')
+Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
+img_ky_f = ax.pcolormesh(Ky, Freq, fft_result[val_to_idx(0, resolution_x, Kxs), :, :], cmap='viridis')
+ax.set_aspect(Kys / Fs)
+plt.colorbar(img_ky_f, label='Amplitude')
+plt.subplots_adjust(bottom=0.25)
+space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
+kx_slider = Slider(
+    ax=space_slider,
+    label='kx',
+    valmin=-Kxs / 4,
+    valmax=Kxs / 4,
+    valinit=0,
+    valstep=Kxs / 2 / resolution_x,
+)
+
+
+def update_kx(val):
+    ax.pcolormesh(Ky, Freq, fft_result[val_to_idx(val, resolution_x, Kxs), :, :], cmap='viridis')
     fig5.canvas.draw_idle()
 
 
-kx_slider.on_changed(update_ky)
+kx_slider.on_changed(update_kx)
 plt.show()
