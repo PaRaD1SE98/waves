@@ -150,7 +150,7 @@ def f_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int(v * t_max - 1)
+    return int(v * t_max)
 
 
 def update(val):
@@ -168,7 +168,7 @@ def kx_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int(v * x_max - 1)
+    return int(v * x_max)
 
 
 plt.close()
@@ -207,7 +207,7 @@ def kyx_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int(v * y_max - 1)
+    return int(v * y_max)
 
 
 plt.close()
