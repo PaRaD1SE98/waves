@@ -4,88 +4,96 @@ from matplotlib.widgets import Slider
 import matplotlib.animation as animation
 
 
-def wave1(x, t):
-    return np.cos(t - x) + np.cos(1.2 * t - 1.2 * x)
+def wave(x, y, t):
+    center_x = .5
+    center_y = .5
+    kx1 = 40  # 1/m
+    kx2 = 80  # 1/m
+    kx3 = 90  # 1/m
+    kx4 = 100  # 1/m
+    ky1 = 40  # 1/m
+    ky2 = 80  # 1/m
+    ky3 = 70  # 1/m
+    ky4 = 79  # 1/m
+    f1 = 50  # Hz
+    f2 = 70  # Hz
+    f3 = 55  # Hz
+    f4 = 100  # Hz
+    assert sft > 2 * max(f1, f2, f3, f4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    assert sfx > 2 * max(kx1, kx2, kx3, kx4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    assert sfy > 2 * max(ky1, ky2, ky3, ky4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    w = np.sin(np.sqrt((2 * np.pi * kx1 * (x-center_x))**2 + (2 * np.pi * ky1 * (y-center_y))**2) + 2 * np.pi * f1 * t)
+    w += np.sin(np.sqrt((2 * np.pi * kx2 * (x-center_x))**2 + (2 * np.pi * ky2 * (y-center_y))**2) + 2 * np.pi * f2 * t)
+    w += np.sin(np.sqrt((2 * np.pi * kx3 * (x-center_x))**2 + (2 * np.pi * ky3 * (y-center_y))**2) + 2 * np.pi * f3 * t)
+    w += np.sin(np.sqrt((2 * np.pi * kx4 * (x-center_x))**2 + (2 * np.pi * ky4 * (y-center_y))**2) + 2 * np.pi * f4 * t)
+    return w / 4
 
 
-def wave2(x, y, t):
-    f1 = 20
-    f2 = 50
-    k1 = f1
-    k2 = f2
-
-    return (np.cos(2 * np.pi * f1 * t - np.sqrt((2 * np.pi * k1 * (x - 50)) ** 2 + (2 * np.pi * k1 * (y - 50)) ** 2))
-            + np.cos(2 * np.pi * f2 * t - np.sqrt(
-                (2 * np.pi * k2 * (x - 50)) ** 2 + (2 * np.pi * k2 * (y - 50)) ** 2))) / 2 * np.exp(-t)
-
-
-def wave3(x, y, t):
-    return np.sin(2 * np.pi * t - np.sqrt((2 * np.pi * (x - 50)) ** 2 + (2 * np.pi * (y - 50)) ** 2)) / np.exp(-t)
-
-
-def pulse1(x, y, t):
-    return 4 * np.sqrt((x - 50) ** 2 + (y - 50) ** 2) + 5 * t + 4
-
-
-def pulse2(x, y, t):
+def pulse(x, y, t):
     """
     y=exp(-(sqrt(x^2+y^2)-t)^2)*(sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
     center_x = 0
-    center_y = 50
-    omega_0 = 2 * np.pi * 10  # 2 * pi * f
-    omega_1 = 2 * np.pi * 20  # 2 * pi * f
-    omega_2 = 2 * np.pi * 30  # 2 * pi * f
-    k_0 = 1
-    k_1 = 2
-    k_2 = 3
+    center_y = .5
+    f1 = 30  # Hz
+    f2 = 50  # Hz
+    f3 = 80  # Hz
+    kx1 = 20  # 1/m
+    kx2 = 40  # 1/m
+    kx3 = 60  # 1/m
+    ky1 = 20  # 1/m
+    ky2 = 40  # 1/m
+    ky3 = 60  # 1/m
+    assert sft > 2 * max(f1, f2, f3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    assert sfx > 2 * max(kx1, kx2, kx3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    assert sfy > 2 * max(ky1, ky2, ky3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
+    p = np.exp(
+        - (np.sqrt((2*np.pi* kx1 *(x - center_x)) ** 2 + (2*np.pi* ky1 *(y - center_y))** 2)
+           - 2 * np.pi * f1 * t) ** 2)
+    p *= (np.sin(np.sqrt((2*np.pi* kx2 *(x - center_x)) ** 2 + (2*np.pi* ky2 *(y - center_y))**2) - 2 * np.pi * f2 * t) + np.cos(np.sqrt((2*np.pi* kx3 *(x - center_x)) ** 2 + (2*np.pi* ky3 *(y - center_y))**2) - 2 * np.pi * f3 * t)) / 2
+    return p
 
-    return np.exp(-1 / 50 * (np.sqrt(k_0 * (x - center_x) ** 2 + k_0 * (y - center_y) ** 2) - omega_0 * t) ** 2) * 0.5 \
-           * (np.sin(np.sqrt(k_1 * (x - center_x) ** 2 + k_1 * (y - center_y) ** 2) - omega_1 / 2 * t) +
-              np.cos(np.sqrt(k_2 * (x - center_x) ** 2 + k_2 * (y - center_y) ** 2) - omega_2 / 5 * t))
 
+sp = 256  # sampling points in 1d
+t_max = 1
+x_max = 1
+y_max = 1
+dt = t_max / sp  # sampling interval
+dx = x_max / sp  # sampling interval
+dy = y_max / sp  # sampling interval
+sft = sp / t_max  # sampling frequency t
+sfx = sp / x_max  # sampling spatial frequency x
+sfy = sp / y_max  # sampling spatial frequency y
 
-resolution_x = 100  # steps_x
-resolution_y = 100  # steps_y
-resolution_t = 100  # steps_t
+print('sampling frequency t', sft)
+print('sampling frequency x', sfx)
+print('sampling frequency y', sfy)
 
-x_max = 100  # m
-y_max = 100  # m
-t_max = 2  # s
-
-Fs = resolution_t / t_max  # sampling frequency, (Hz)
-Kxs = resolution_x / x_max  # sampling spatial frequency along X in (1/m)
-Kys = resolution_y / y_max  # sampling spatial frequency along Y in (1/m)
-print('Fs', Fs)
-print('Kxs', Kxs)
-print('Kys', Kys)
-X = np.arange(0, x_max, 1 / Kxs)
-Y = np.arange(0, y_max, 1 / Kys)
-T = np.arange(0, t_max, 1 / Fs)
+T = np.arange(0, t_max, dt)
+X = np.arange(0, x_max, dx)
+Y = np.arange(0, y_max, dy)
 x, y = np.meshgrid(X, Y, indexing='ij')
-z = np.zeros((len(X), len(Y), len(T)))
 
+z = np.zeros((len(X), len(Y), len(T)))
 for i, t in enumerate(T):
-    z[:, :, i] = pulse2(x, y, t)
+    z[:, :, i] = pulse(x, y, t)
 
 print('z.shape', z.shape)
 
-
+fps = 256
+# fps = 10
+print('fps', fps)
 def change_plot(frame_number, z_array, plot):
     plot[0].remove()
     plot[0] = ax.plot_surface(x, y, z_array[:, :, frame_number], cmap="viridis")
 
-
-fps = resolution_t / t_max
-# fps = 10
-print('fps', fps)
 
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('z')
-surface = [ax.plot_surface(x, y, z[:, :, 0], color='0.75', rstride=1, cstride=1)]
+surface = [ax.plot_surface(x, y, z[:, :, 50], color='0.75', rstride=1, cstride=1)]
 ax.set_zlim(-1, 1)
 ani = animation.FuncAnimation(fig, change_plot, len(T), fargs=(z, surface), interval=1000 / fps)
 plt.show()
@@ -93,55 +101,60 @@ plt.show()
 
 def change_plot_img(frame_number, z_array, plot):
     plot[0].remove()
-    plot[0] = ax.pcolormesh(x, y, z_array[:, :, frame_number], cmap='viridis')
+    plot[0] = ax2.pcolormesh(x, y, z_array[:, :, frame_number], cmap='viridis')
 
 
 fig2 = plt.figure()
-ax = fig2.add_subplot()
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-image = [ax.pcolormesh(x, y, z[:, :, 0], cmap='viridis')]
-ax.set_aspect(x_max / y_max)
+ax2 = fig2.add_subplot()
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+image = [ax2.pcolormesh(x, y, z[:, :, 50], cmap='viridis')]
+ax2.set_aspect(x_max / y_max)
 plt.colorbar(image[0], label='Amplitude')
 ani2 = animation.FuncAnimation(fig2, change_plot_img, len(T), fargs=(z, image), interval=1000 / fps)
 plt.show()
 
-Kx_range = -Kxs / 4, Kxs / 4
-Ky_range = -Kys / 4, Kys / 4
-F_range = 0, Fs / 2
-# Nyquist check
-assert Kx_range[1] - Kx_range[0] <= Kxs / 2
-assert Ky_range[1] - Ky_range[0] <= Kys / 2
-assert F_range[1] - F_range[0] <= Fs / 2
+KX = np.arange(-sfx / 2, sfx / 2, sfx / sp)
+KY = np.arange(-sfy / 2, sfy / 2, sfy / sp)
+FREQ = np.arange(0, sft, sft / sp)
 
-KX = np.linspace(*Kx_range, resolution_x)
-KY = np.linspace(*Ky_range, resolution_y)
-FREQ = np.linspace(*F_range, resolution_t)
-
-fft_result = np.abs(np.fft.fftshift(np.fft.fftn(z), axes=(0, 1)))
+fft_result = np.fft.fftn(z)
+abs_fft = np.abs(fft_result)
+shifted_fft = np.fft.fftshift(abs_fft, axes=(0, 1))
 
 fig3 = plt.figure()
-ax = fig3.add_subplot()
-ax.set_xlabel('Kx')
-ax.set_ylabel('Ky')
+ax3 = fig3.add_subplot()
+ax3.set_xlabel('Kx')
+ax3.set_ylabel('Ky')
 Kx, Ky = np.meshgrid(KX, KY, indexing='ij')
-img_kx_ky = ax.pcolormesh(Kx, Ky, fft_result[:, :, 0], cmap='viridis')
-ax.set_aspect(Kxs / Kys)
-plt.colorbar(img_kx_ky, label='Amplitude')
-plt.subplots_adjust(bottom=0.25)
-space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
+image_fft = ax3.pcolormesh(Kx, Ky, shifted_fft[:, :, 0], cmap='viridis')
+# plt.xlim(-sfx / 2, sfx / 2)
+# plt.ylim(-sfy / 2, sfy / 2)
+# ax3.set_aspect(x / y)
+fig3.colorbar(image_fft, label='Amplitude')
+fig3.subplots_adjust(bottom=0.25)
+ax_freq = plt.axes([0.20, 0.05, 0.65, 0.06])
 freq_slider = Slider(
-    ax=space_slider,
+    ax=ax_freq,
     label='Freq',
     valmin=0,
-    valmax=Fs / 2,
+    valmax=sft / 2,
     valinit=0,
-    valstep=Fs / 2 / resolution_t,
+    valstep=1 / t_max,
 )
 
 
+def f_val_to_idx(v):
+    """
+    slide value to ndarray index
+    :param v: slide value
+    :rtype: int
+    """
+    return int(v * t_max - 1)
+
+
 def update(val):
-    ax.pcolormesh(Kx, Ky, fft_result[:, :, int(val * resolution_t / (Fs / 2)) - 1], cmap='viridis')
+    ax3.pcolormesh(Kx, Ky, shifted_fft[:, :, f_val_to_idx(val)], cmap='viridis')
     fig3.canvas.draw_idle()
 
 
@@ -149,69 +162,97 @@ freq_slider.on_changed(update)
 plt.show()
 
 
-def val_to_idx(v, res, ks):
+def kx_val_to_idx(v):
     """
-    slide value of kx or ky to ndarray index
+    slide value to ndarray index
     :param v: slide value
-    :param res: resolution of axis
-    :param ks: sampling spatial frequency
     :rtype: int
     """
-    return int(v * (res / (ks / 2)) + res / 2) - 1
+    return int(v * x_max - 1)
 
 
+plt.close()
 fig4 = plt.figure()
-ax = fig4.add_subplot()
-ax.set_xlabel('Kx')
-ax.set_ylabel('Freq')
+ax4 = fig4.add_subplot()
+ax4.set_xlabel('Kx')
+ax4.set_ylabel('Freq')
 Kx, Freq = np.meshgrid(KX, FREQ, indexing='ij')
-img_kx_f = ax.pcolormesh(Kx, Freq, fft_result[:, val_to_idx(0, resolution_y, Kys), :], cmap='viridis')
-ax.set_aspect(Kxs / Fs)
-plt.colorbar(img_kx_f, label='Amplitude')
-plt.subplots_adjust(bottom=0.25)
-space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
+image_fft_ky = ax4.pcolormesh(Kx, Freq, shifted_fft[:, kx_val_to_idx(0), :], cmap='viridis')
+plt.ylim(0, sft / 2)  # set valid frequency window
+# ax4.set_aspect(x / y)
+fig4.colorbar(image_fft_ky, label='Amplitude')
+fig4.subplots_adjust(bottom=0.25)
+ax_ky = plt.axes([0.20, 0.05, 0.65, 0.06])
 ky_slider = Slider(
-    ax=space_slider,
+    ax=ax_ky,
     label='ky',
-    valmin=-Kys / 4,
-    valmax=Kys / 4,
+    valmin=-sfy / 2,
+    valmax=sfy / 2,
     valinit=0,
-    valstep=Kys / 2 / resolution_y,
+    valstep=1 / y_max,
 )
 
 
 def update_ky(val):
-    ax.pcolormesh(Kx, Freq, fft_result[:, val_to_idx(val, resolution_y, Kys), :], cmap='viridis')
+    ax4.pcolormesh(Kx, Freq, shifted_fft[:, kx_val_to_idx(val), :], cmap='viridis')
     fig4.canvas.draw_idle()
 
 
 ky_slider.on_changed(update_ky)
 plt.show()
 
+def kyx_val_to_idx(v):
+    """
+    slide value to ndarray index
+    :param v: slide value
+    :rtype: int
+    """
+    return int(v * y_max - 1)
+
+
+plt.close()
 fig5 = plt.figure()
-ax = fig5.add_subplot()
-ax.set_xlabel('Ky')
-ax.set_ylabel('Freq')
+ax5 = fig5.add_subplot()
+ax5.set_xlabel('Ky')
+ax5.set_ylabel('Freq')
 Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
-img_ky_f = ax.pcolormesh(Ky, Freq, fft_result[val_to_idx(0, resolution_x, Kxs), :, :], cmap='viridis')
-ax.set_aspect(Kys / Fs)
-plt.colorbar(img_ky_f, label='Amplitude')
+image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_fft[kyx_val_to_idx(0), :, :], cmap='viridis')
+plt.ylim(0, sft / 2)  # set valid frequency window
+# ax5.set_aspect(x / y)
+plt.colorbar(image_fft_kx, label='Amplitude')
 plt.subplots_adjust(bottom=0.25)
-space_slider = plt.axes([0.20, 0.05, 0.65, 0.06])
+ax_kx = plt.axes([0.20, 0.05, 0.65, 0.06])
 kx_slider = Slider(
-    ax=space_slider,
+    ax=ax_kx,
     label='kx',
-    valmin=-Kxs / 4,
-    valmax=Kxs / 4,
+    valmin=-sfy / 2,
+    valmax=sfy / 2,
     valinit=0,
-    valstep=Kxs / 2 / resolution_x,
+    valstep=1 / x_max,
 )
 
 
 def update_kx(val):
-    ax.pcolormesh(Ky, Freq, fft_result[val_to_idx(val, resolution_x, Kxs), :, :], cmap='viridis')
+    ax5.pcolormesh(Ky, Freq, shifted_fft[kyx_val_to_idx(val), :, :], cmap='viridis')
     fig5.canvas.draw_idle()
 
 
 kx_slider.on_changed(update_kx)
+plt.show()
+
+ifft_result = np.fft.ifftn(fft_result).real
+
+def change_plot_img(frame_number, z_array, plot):
+    plot[0].remove()
+    plot[0] = ax6.pcolormesh(x, y, z_array[:, :, frame_number], cmap='viridis')
+
+
+fig6 = plt.figure()
+ax6 = fig6.add_subplot()
+ax6.set_xlabel('x')
+ax6.set_ylabel('y')
+image = [ax6.pcolormesh(x, y, ifft_result[:, :, 50], cmap='viridis')]
+ax6.set_aspect(x_max / y_max)
+plt.colorbar(image[0], label='Amplitude')
+ani3 = animation.FuncAnimation(fig6, change_plot_img, len(T), fargs=(ifft_result, image), interval=1000 / fps)
 plt.show()
