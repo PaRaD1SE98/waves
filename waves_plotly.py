@@ -4,73 +4,98 @@ import pandas as pd
 import plotly.express as px
 
 
-def wave(x, y, t):
-    center_x = .5
-    center_y = .5
-    kx1 = 40  # 1/m
-    kx2 = 80  # 1/m
-    kx3 = 90  # 1/m
-    kx4 = 100  # 1/m
-    ky1 = 40  # 1/m
-    ky2 = 80  # 1/m
-    ky3 = 70  # 1/m
-    ky4 = 79  # 1/m
-    f1 = 50  # Hz
-    f2 = 70  # Hz
-    f3 = 55  # Hz
-    f4 = 100  # Hz
-    assert sft > 2 * max(f1, f2, f3, f4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    assert sfx > 2 * max(kx1, kx2, kx3, kx4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    assert sfy > 2 * max(ky1, ky2, ky3, ky4), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    w = np.sin(np.sqrt((2 * np.pi * kx1 * (x-center_x))**2 + (2 * np.pi * ky1 * (y-center_y))**2) + 2 * np.pi * f1 * t)
-    w += np.sin(np.sqrt((2 * np.pi * kx2 * (x-center_x))**2 + (2 * np.pi * ky2 * (y-center_y))**2) + 2 * np.pi * f2 * t)
-    w += np.sin(np.sqrt((2 * np.pi * kx3 * (x-center_x))**2 + (2 * np.pi * ky3 * (y-center_y))**2) + 2 * np.pi * f3 * t)
-    w += np.sin(np.sqrt((2 * np.pi * kx4 * (x-center_x))**2 + (2 * np.pi * ky4 * (y-center_y))**2) + 2 * np.pi * f4 * t)
-    return w / 4
+class Wave:
+    center = [.5, .5]  # x, y
+    frequency = [50, 70, 55, 100]  # Hz
+    wave_number_x = [40, 80, 90, 100]  # 1/m
+    wave_number_y = [40, 80, 70, 79]  # 1/m
 
-def pulse(x, y, t):
+    def __init__(self, x, y, t):
+        self.x = x
+        self.y = y
+        self.t = t
+
+    def __call__(self, *args, **kwargs):
+        w = np.sin(
+            np.sqrt((2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 + (
+                    2 * np.pi * self.wave_number_y[0] * (self.y - self.center[1])) ** 2) + 2 * np.pi *
+            self.frequency[0] * self.t)
+        w += np.sin(
+            np.sqrt((2 * np.pi * self.wave_number_x[1] * (self.x - self.center[0])) ** 2 + (
+                    2 * np.pi * self.wave_number_y[1] * (self.y - self.center[1])) ** 2) + 2 * np.pi *
+            self.frequency[1] * self.t)
+        w += np.sin(
+            np.sqrt((2 * np.pi * self.wave_number_x[2] * (self.x - self.center[0])) ** 2 + (
+                    2 * np.pi * self.wave_number_y[2] * (self.y - self.center[1])) ** 2) + 2 * np.pi *
+            self.frequency[2] * self.t)
+        w += np.sin(
+            np.sqrt((2 * np.pi * self.wave_number_x[3] * (self.x - self.center[0])) ** 2 + (
+                    2 * np.pi * self.wave_number_y[3] * (self.y - self.center[1])) ** 2) + 2 * np.pi *
+            self.frequency[3] * self.t)
+        return w / 4
+
+
+class Pulse:
     """
-    y=exp(-(sqrt(x^2+y^2)-t)^2)*(sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
+    y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
-    center_x = 0
-    center_y = .5
-    f1 = 30  # Hz
-    f2 = 50  # Hz
-    f3 = 10  # Hz
-    kx1 = 20  # 1/m
-    kx2 = 40  # 1/m
-    kx3 = 60  # 1/m
-    ky1 = 20  # 1/m
-    ky2 = 40  # 1/m
-    ky3 = 60  # 1/m
-    assert sft > 2 * max(f1, f2, f3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    assert sfx > 2 * max(kx1, kx2, kx3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    assert sfy > 2 * max(ky1, ky2, ky3), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the wave'
-    p = np.exp(
-        - (np.sqrt((2*np.pi* kx1 *(x - center_x)) ** 2 + (2*np.pi* ky1 *(y - center_y))** 2)
-           - 2 * np.pi * f1 * t) ** 2)
-    p *= (np.sin(np.sqrt((2*np.pi* kx2 *(x - center_x)) ** 2 + (2*np.pi* ky2 *(y - center_y))**2) - 2 * np.pi * f2 * t) + np.cos(np.sqrt((2*np.pi* kx3 *(x - center_x)) ** 2 + (2*np.pi* ky3 *(y - center_y))**2) - 2 * np.pi * f3 * t)) / 2
-    return p
+    center = [0, .5]  # x, y
+    frequency = [30, 50, 80]  # Hz
+    wave_number_x = [20, 40, 60]  # 1/m
+    wave_number_y = [20, 40, 60]  # 1/m
 
-sp = 128  # sampling points in 1d
-t_max = 1  # s
-x_max = 1  # m
-y_max = 1  # m
-dt = t_max / sp  # sampling interval
-dx = x_max / sp  # sampling interval
-dy = y_max / sp  # sampling interval
-sft = sp / t_max  # sampling frequency t
-sfx = sp / x_max  # sampling spatial frequency x
-sfy = sp / y_max  # sampling spatial frequency y
+    def __init__(self, x, y, t):
+        self.x = x
+        self.y = y
+        self.t = t
 
-print('sampling frequency t', sft)
-print('sampling frequency x', sfx)
-print('sampling frequency y', sfy)
+    def __call__(self, *args, **kwargs):
+        p = np.exp(
+            - (np.sqrt(
+                (2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 +
+                (2 * np.pi * self.wave_number_y[0] * (self.y - self.center[1])) ** 2
+            ) - 2 * np.pi * self.frequency[0] * self.t) ** 2
+        )
+        p *= np.sin(
+            np.sqrt(
+                (2 * np.pi * self.wave_number_x[1] * (self.x - self.center[0])) ** 2 +
+                (2 * np.pi * self.wave_number_y[1] * (self.y - self.center[1])) ** 2
+            ) - 2 * np.pi * self.frequency[1] * self.t
+        ) + \
+            np.cos(
+                np.sqrt(
+                    (2 * np.pi * self.wave_number_x[2] * (self.x - self.center[0])) ** 2 +
+                    (2 * np.pi * self.wave_number_y[2] * (self.y - self.center[1])) ** 2
+                ) - 2 * np.pi * self.frequency[2] * self.t
+            )
+        return p / 2
+
+
+sp = 256  # sampling points in 1d
+t_max = 1
+x_max = 1
+y_max = 1
+dt = t_max / sp  # sampling interval (s)
+dx = x_max / sp  # sampling interval (m)
+dy = y_max / sp  # sampling interval (m
+sft = sp / t_max  # sampling temporal frequency (sampling points in 1s) t
+sfx = sp / x_max  # sampling spatial frequency (sampling points in 1m) x
+sfy = sp / y_max  # sampling spatial frequency (sampling points in 1m) y
+
+print('sampling frequency t', sft, 'Hz')
+print('sampling frequency x', sfx, 'Hz')
+print('sampling frequency y', sfy, 'Hz')
+
+T = np.arange(0, t_max, dt)
 X = np.arange(0, x_max, dx)
 Y = np.arange(0, y_max, dy)
-T = np.arange(0, t_max, dt)
 x, y, t = np.meshgrid(X, Y, T)
-z = pulse(x, y, t)
+
+Signal = Pulse  # choose the signal to be analyzed
+z = Signal(x, y, t)()
+assert sft > 2 * max(Signal.frequency), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
+assert sfx > 2 * max(Signal.wave_number_x), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
+assert sfy > 2 * max(Signal.wave_number_y), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
 print('z.shape', z.shape)
 data = {'x': x.flatten(), 'y': y.flatten(), 't': t.flatten(), 'z': z.flatten()}
 df = pd.DataFrame(data)
