@@ -8,7 +8,7 @@ class Wave:
     center = [.5, .5]  # x, y
     frequency = [50, 70, 55, 100]  # Hz
     wave_number_x = [40, 80, 90, 100]  # 1/m
-    wave_number_y = [40, 80, 70, 79]  # 1/m
+    wave_number_y = [40, 80, 90, 100]  # 1/m
 
     def __init__(self, x, y, t):
         self.x = x
@@ -72,9 +72,9 @@ class Pulse:
 
 
 sp = 256  # sampling points in 1d
-t_max = .5
-x_max = .5
-y_max = .5
+t_max = 1
+x_max = 1
+y_max = 1
 dt = t_max / sp  # sampling interval (s)
 dx = x_max / sp  # sampling interval (m)
 dy = y_max / sp  # sampling interval (m
@@ -93,10 +93,13 @@ x, y = np.meshgrid(X, Y, indexing='ij')
 
 z = np.zeros((len(X), len(Y), len(T)))
 
-Signal = Wave  # choose the signal to be analyzed
-assert sft > 2 * max(Signal.frequency), f'Nyquist: Make sure sampling frequency(current:{sft}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
-assert sfx > 2 * max(Signal.wave_number_x), f'Nyquist: Make sure sampling frequency(current:{sfx}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
-assert sfy > 2 * max(Signal.wave_number_y), f'Nyquist: Make sure sampling frequency(current:{sfy}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
+Signal = Pulse  # choose the signal to be analyzed
+assert sft > 2 * max(
+    Signal.frequency), f'Nyquist: Make sure sampling frequency(current:{sft}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
+assert sfx > 2 * max(
+    Signal.wave_number_x), f'Nyquist: Make sure sampling frequency(current:{sfx}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
+assert sfy > 2 * max(
+    Signal.wave_number_y), f'Nyquist: Make sure sampling frequency(current:{sfy}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
 
 for i, t in enumerate(T):
     z[:, :, i] = Signal(x, y, t)()
@@ -145,14 +148,15 @@ FREQ = np.arange(0, sft, sft / sp)
 
 fft_result = np.fft.fftn(z)
 abs_fft = np.abs(fft_result)
-shifted_fft = np.fft.fftshift(abs_fft, axes=(0, 1))
+shifted_fft = np.fft.fftshift(fft_result, axes=(0, 1))
+shifted_abs_fft = np.fft.fftshift(abs_fft, axes=(0, 1))
 
 fig3 = plt.figure()
 ax3 = fig3.add_subplot()
 ax3.set_xlabel('Kx')
 ax3.set_ylabel('Ky')
 Kx, Ky = np.meshgrid(KX, KY, indexing='ij')
-image_fft = ax3.pcolormesh(Kx, Ky, shifted_fft[:, :, 0], cmap='viridis')
+image_fft = ax3.pcolormesh(Kx, Ky, shifted_abs_fft[:, :, 0], cmap='viridis')
 # plt.xlim(-sfx / 2, sfx / 2)
 # plt.ylim(-sfy / 2, sfy / 2)
 # ax3.set_aspect(x / y)
@@ -179,7 +183,7 @@ def f_val_to_idx(v):
 
 
 def update(val):
-    ax3.pcolormesh(Kx, Ky, shifted_fft[:, :, f_val_to_idx(val)], cmap='viridis')
+    ax3.pcolormesh(Kx, Ky, shifted_abs_fft[:, :, f_val_to_idx(val)], cmap='viridis')
     fig3.canvas.draw_idle()
 
 
@@ -202,7 +206,7 @@ ax4 = fig4.add_subplot()
 ax4.set_xlabel('Kx')
 ax4.set_ylabel('Freq')
 Kx, Freq = np.meshgrid(KX, FREQ, indexing='ij')
-image_fft_ky = ax4.pcolormesh(Kx, Freq, shifted_fft[:, kx_val_to_idx(0), :], cmap='viridis')
+image_fft_ky = ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, kx_val_to_idx(0), :], cmap='viridis')
 plt.ylim(0, sft / 2)  # set valid frequency window
 # ax4.set_aspect(x / y)
 fig4.colorbar(image_fft_ky, label='Amplitude')
@@ -219,7 +223,7 @@ ky_slider = Slider(
 
 
 def update_ky(val):
-    ax4.pcolormesh(Kx, Freq, shifted_fft[:, kx_val_to_idx(val), :], cmap='viridis')
+    ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, kx_val_to_idx(val), :], cmap='viridis')
     fig4.canvas.draw_idle()
 
 
@@ -242,7 +246,7 @@ ax5 = fig5.add_subplot()
 ax5.set_xlabel('Ky')
 ax5.set_ylabel('Freq')
 Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
-image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_fft[ky_val_to_idx(0), :, :], cmap='viridis')
+image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_abs_fft[ky_val_to_idx(0), :, :], cmap='viridis')
 plt.ylim(0, sft / 2)  # set valid frequency window
 # ax5.set_aspect(x / y)
 plt.colorbar(image_fft_kx, label='Amplitude')
@@ -259,14 +263,27 @@ kx_slider = Slider(
 
 
 def update_kx(val):
-    ax5.pcolormesh(Ky, Freq, shifted_fft[ky_val_to_idx(val), :, :], cmap='viridis')
+    ax5.pcolormesh(Ky, Freq, shifted_abs_fft[ky_val_to_idx(val), :, :], cmap='viridis')
     fig5.canvas.draw_idle()
 
 
 kx_slider.on_changed(update_kx)
 plt.show()
 
-ifft_result = np.fft.ifftn(fft_result).real
+# filter parameters
+kx_range = 0, 1
+ky_range = 0, 1
+f_range = 100, 150
+
+mask_kx_negative = mask_kx_positive = mask_ky_negative = mask_ky_positive = mask_f = np.zeros((sp, sp, sp))
+mask_kx_negative[kx_val_to_idx(-kx_range[1]):kx_val_to_idx(-kx_range[0]), :, :] = 1
+mask_kx_positive[kx_val_to_idx(kx_range[0]):kx_val_to_idx(kx_range[1]), :, :] = 1
+mask_ky_negative[:, ky_val_to_idx(-ky_range[1]):ky_val_to_idx(-ky_range[0]), :] = 1
+mask_ky_positive[:, ky_val_to_idx(ky_range[0]):ky_val_to_idx(ky_range[1]), :] = 1
+mask_f[:, :, f_val_to_idx(f_range[0]):f_val_to_idx(f_range[1])] = 1
+
+fft_masked = shifted_fft * mask_kx_negative * mask_kx_positive * mask_ky_negative * mask_ky_positive + mask_f
+ifft_result = np.fft.ifftn(np.fft.ifftshift(fft_masked)).real
 
 
 def change_plot_img(frame_number, z_array, plot):
@@ -282,4 +299,14 @@ image = [ax6.pcolormesh(x, y, ifft_result[:, :, 0], cmap='viridis')]
 ax6.set_aspect(x_max / y_max)
 plt.colorbar(image[0], label='Amplitude')
 ani3 = animation.FuncAnimation(fig6, change_plot_img, len(T), fargs=(ifft_result, image), interval=1000 / fps)
+plt.show()
+
+fig7 = plt.figure()
+ax = fig7.add_subplot(projection='3d')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z')
+surface2 = [ax.plot_surface(x, y, ifft_result[:, :, 0], color='0.75', rstride=1, cstride=1)]
+ax.set_zlim(-1, 1)
+ani4 = animation.FuncAnimation(fig7, change_plot, len(T), fargs=(ifft_result, surface2), interval=1000 / fps)
 plt.show()
