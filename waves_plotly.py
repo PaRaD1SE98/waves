@@ -82,9 +82,9 @@ sft = sp / t_max  # sampling temporal frequency (sampling points in 1s) t
 sfx = sp / x_max  # sampling spatial frequency (sampling points in 1m) x
 sfy = sp / y_max  # sampling spatial frequency (sampling points in 1m) y
 
-print('sampling frequency t', sft, 'Hz')
-print('sampling frequency x', sfx, 'Hz')
-print('sampling frequency y', sfy, 'Hz')
+print('sampling temporal frequency (sampling points in 1s) t', sft, 'Hz')
+print('sampling spatial frequency (sampling points in 1m) x', sfx, '1/m')
+print('sampling spatial frequency (sampling points in 1m) y', sfy, '1/m')
 
 T = np.arange(0, t_max, dt)
 X = np.arange(0, x_max, dx)

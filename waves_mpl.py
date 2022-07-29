@@ -40,7 +40,7 @@ class Pulse:
     y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
     center = [0, .5]  # x, y
-    frequency = [30, 50, 80]  # Hz
+    frequency = [30, 50, 127]  # Hz
     wave_number_x = [20, 40, 60]  # 1/m
     wave_number_y = [20, 40, 60]  # 1/m
 
@@ -72,9 +72,9 @@ class Pulse:
 
 
 sp = 256  # sampling points in 1d
-t_max = 1
-x_max = 1
-y_max = 1
+t_max = .5
+x_max = .5
+y_max = .5
 dt = t_max / sp  # sampling interval (s)
 dx = x_max / sp  # sampling interval (m)
 dy = y_max / sp  # sampling interval (m
@@ -82,9 +82,9 @@ sft = sp / t_max  # sampling temporal frequency (sampling points in 1s) t
 sfx = sp / x_max  # sampling spatial frequency (sampling points in 1m) x
 sfy = sp / y_max  # sampling spatial frequency (sampling points in 1m) y
 
-print('sampling frequency t', sft, 'Hz')
-print('sampling frequency x', sfx, 'Hz')
-print('sampling frequency y', sfy, 'Hz')
+print('sampling temporal frequency (sampling points in 1s) t', sft, 'Hz')
+print('sampling spatial frequency (sampling points in 1m) x', sfx, '1/m')
+print('sampling spatial frequency (sampling points in 1m) y', sfy, '1/m')
 
 T = np.arange(0, t_max, dt)
 X = np.arange(0, x_max, dx)
@@ -93,10 +93,10 @@ x, y = np.meshgrid(X, Y, indexing='ij')
 
 z = np.zeros((len(X), len(Y), len(T)))
 
-Signal = Pulse  # choose the signal to be analyzed
-assert sft > 2 * max(Signal.frequency), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
-assert sfx > 2 * max(Signal.wave_number_x), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
-assert sfy > 2 * max(Signal.wave_number_y), 'Nyquist: Make sure sampling frequency > 2 * highest frequency of the signal'
+Signal = Wave  # choose the signal to be analyzed
+assert sft > 2 * max(Signal.frequency), f'Nyquist: Make sure sampling frequency(current:{sft}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
+assert sfx > 2 * max(Signal.wave_number_x), f'Nyquist: Make sure sampling frequency(current:{sfx}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
+assert sfy > 2 * max(Signal.wave_number_y), f'Nyquist: Make sure sampling frequency(current:{sfy}) > 2 * highest frequency of the signal(current:{2 * max(Signal.frequency)})'
 
 for i, t in enumerate(T):
     z[:, :, i] = Signal(x, y, t)()
@@ -165,7 +165,7 @@ freq_slider = Slider(
     valmin=0,
     valmax=sft / 2,
     valinit=0,
-    valstep=1 / t_max,
+    valstep=sft / sp,
 )
 
 
@@ -193,7 +193,7 @@ def kx_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int(v * x_max)
+    return int((v + sfx / 2) * x_max)
 
 
 plt.close()
@@ -214,7 +214,7 @@ ky_slider = Slider(
     valmin=-sfy / 2,
     valmax=sfy / 2,
     valinit=0,
-    valstep=1 / y_max,
+    valstep=sfy / sp,
 )
 
 
@@ -227,13 +227,13 @@ ky_slider.on_changed(update_ky)
 plt.show()
 
 
-def kyx_val_to_idx(v):
+def ky_val_to_idx(v):
     """
     slide value to ndarray index
     :param v: slide value
     :rtype: int
     """
-    return int(v * y_max)
+    return int((v + sfy / 2) * y_max)
 
 
 plt.close()
@@ -242,7 +242,7 @@ ax5 = fig5.add_subplot()
 ax5.set_xlabel('Ky')
 ax5.set_ylabel('Freq')
 Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
-image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_fft[kyx_val_to_idx(0), :, :], cmap='viridis')
+image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_fft[ky_val_to_idx(0), :, :], cmap='viridis')
 plt.ylim(0, sft / 2)  # set valid frequency window
 # ax5.set_aspect(x / y)
 plt.colorbar(image_fft_kx, label='Amplitude')
@@ -251,15 +251,15 @@ ax_kx = plt.axes([0.20, 0.05, 0.65, 0.06])
 kx_slider = Slider(
     ax=ax_kx,
     label='kx',
-    valmin=-sfy / 2,
-    valmax=sfy / 2,
+    valmin=-sfx / 2,
+    valmax=sfx / 2,
     valinit=0,
-    valstep=1 / x_max,
+    valstep=sfx / sp,
 )
 
 
 def update_kx(val):
-    ax5.pcolormesh(Ky, Freq, shifted_fft[kyx_val_to_idx(val), :, :], cmap='viridis')
+    ax5.pcolormesh(Ky, Freq, shifted_fft[ky_val_to_idx(val), :, :], cmap='viridis')
     fig5.canvas.draw_idle()
 
 
