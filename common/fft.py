@@ -24,6 +24,9 @@ class Mask:
         assert f_range[0] < f_range[1]
         assert kx_range[0] < kx_range[1]
         assert ky_range[0] < ky_range[1]
+        assert f_range[1] < smpl_props.sft / 2
+        assert kx_range[1] < smpl_props.sfx / 2
+        assert ky_range[1] < smpl_props.sfy / 2
 
     def f_val_to_idx(self, v):
         return int(round(v * self.smpl_props.t_max))
@@ -36,18 +39,26 @@ class Mask:
 
     def __call__(self):
         mask = np.zeros((self.smpl_props.sp, self.smpl_props.sp, self.smpl_props.sp))
+        # data points inside the frequency range set to 1
+        mask[
+            :,
+            :,
+            self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
+        ] = 1
+
+        # for kx and ky, need to filter mirror part together
         # higher limit
         # lower than higher limit set to 1
         mask[
-        self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
-        self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
-        self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
+            self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
+            self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
+            :
         ] = 1
         # lower limit
         # lower than lower limit set to 0
         mask[
-        self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
-        self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
-        self.f_val_to_idx(0):self.f_val_to_idx(self.f_range[0])
+            self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
+            self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
+            :
         ] = 0
         return mask

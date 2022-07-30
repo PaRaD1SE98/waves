@@ -4,7 +4,6 @@ from common.fft import FFT, Mask
 from common.sampling import SamplingProperties
 from common.wave_gen import generate_data, property_check, construct_data, Wave, Pulse
 
-
 if __name__ == '__main__':
     # choose 'matplotlib' or 'plotly' as backend
     # plotly is good when sampling points are not more than 128
@@ -24,8 +23,8 @@ if __name__ == '__main__':
     data = generate_data(smpl_props, signal)
 
     # plot data in 2 ways
-    # ani_3d.plot(data, smpl_props.sp)
-    # ani_2d.plot(data, smpl_props.sp)
+    lib.ani_3d.plot(data, smpl_props.sp)
+    lib.ani_2d.plot(data, smpl_props.sp)
 
     # do fft
     fft = FFT(smpl_props)
@@ -38,7 +37,7 @@ if __name__ == '__main__':
 
     # create filter
     # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
-    mask = Mask(smpl_props, (90, 110), (30, 50), (30, 50))()
+    mask = Mask(smpl_props, (30, 50), (30, 50), (30, 50))()
 
     # do filter
     fft_masked = shifted_fft * mask
