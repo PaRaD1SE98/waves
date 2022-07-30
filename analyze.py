@@ -37,7 +37,9 @@ if __name__ == '__main__':
 
     # create filter
     # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
-    mask = Mask(smpl_props, (30, 50), (30, 50), (30, 50))()
+    # todo: improve mask flexibility.
+    # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
+    mask = Mask(smpl_props, (90, 120), (30, 50), (30, 50))()
 
     # do filter
     fft_masked = shifted_fft * mask
