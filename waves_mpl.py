@@ -191,13 +191,13 @@ freq_slider.on_changed(update)
 plt.show()
 
 
-def kx_val_to_idx(v):
+def ky_val_to_idx(v):
     """
     slide value to ndarray index
     :param v: slide value
     :rtype: int
     """
-    return int((v + sfx / 2) * x_max)
+    return int((v + sfy / 2) * y_max)
 
 
 plt.close()
@@ -206,7 +206,7 @@ ax4 = fig4.add_subplot()
 ax4.set_xlabel('Kx')
 ax4.set_ylabel('Freq')
 Kx, Freq = np.meshgrid(KX, FREQ, indexing='ij')
-image_fft_ky = ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, kx_val_to_idx(0), :], cmap='viridis')
+image_fft_ky = ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, ky_val_to_idx(0), :], cmap='viridis')
 plt.ylim(0, sft / 2)  # set valid frequency window
 # ax4.set_aspect(x / y)
 fig4.colorbar(image_fft_ky, label='Amplitude')
@@ -223,7 +223,7 @@ ky_slider = Slider(
 
 
 def update_ky(val):
-    ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, kx_val_to_idx(val), :], cmap='viridis')
+    ax4.pcolormesh(Kx, Freq, shifted_abs_fft[:, ky_val_to_idx(val), :], cmap='viridis')
     fig4.canvas.draw_idle()
 
 
@@ -231,13 +231,13 @@ ky_slider.on_changed(update_ky)
 plt.show()
 
 
-def ky_val_to_idx(v):
+def kx_val_to_idx(v):
     """
     slide value to ndarray index
     :param v: slide value
     :rtype: int
     """
-    return int((v + sfy / 2) * y_max)
+    return int((v + sfx / 2) * x_max)
 
 
 plt.close()
@@ -246,7 +246,7 @@ ax5 = fig5.add_subplot()
 ax5.set_xlabel('Ky')
 ax5.set_ylabel('Freq')
 Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
-image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_abs_fft[ky_val_to_idx(0), :, :], cmap='viridis')
+image_fft_kx = ax5.pcolormesh(Ky, Freq, shifted_abs_fft[kx_val_to_idx(0), :, :], cmap='viridis')
 plt.ylim(0, sft / 2)  # set valid frequency window
 # ax5.set_aspect(x / y)
 plt.colorbar(image_fft_kx, label='Amplitude')
@@ -263,7 +263,7 @@ kx_slider = Slider(
 
 
 def update_kx(val):
-    ax5.pcolormesh(Ky, Freq, shifted_abs_fft[ky_val_to_idx(val), :, :], cmap='viridis')
+    ax5.pcolormesh(Ky, Freq, shifted_abs_fft[kx_val_to_idx(val), :, :], cmap='viridis')
     fig5.canvas.draw_idle()
 
 
