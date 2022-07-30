@@ -39,15 +39,15 @@ class Mask:
         # higher limit
         # lower than higher limit set to 1
         mask[
-            self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
-            self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
-            self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
+        self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
+        self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
+        self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
         ] = 1
         # lower limit
         # lower than lower limit set to 0
         mask[
-            self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
-            self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
-            self.f_val_to_idx(0):self.f_val_to_idx(self.f_range[0])
+        self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
+        self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
+        self.f_val_to_idx(0):self.f_val_to_idx(self.f_range[0])
         ] = 0
         return mask

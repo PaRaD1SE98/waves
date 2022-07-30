@@ -37,7 +37,7 @@ class Pulse:
     y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
     center = 0, .5  # center coordinate (x, y)
-    frequency = 30, 50, 127  # Hz
+    frequency = 30, 50, 60  # Hz
     wave_number_x = 20, 40, 60  # 1/m
     wave_number_y = 20, 40, 60  # 1/m
 
@@ -92,6 +92,7 @@ def generate_data(smpl_props, signal_cls):
         Y = np.arange(0, smpl_props.y_max, smpl_props.dy)
         x, y = np.meshgrid(X, Y, indexing='ij')
         z = np.zeros((len(X), len(Y), len(T)))
+        sample_props = smpl_props
 
         for i, t in enumerate(T):
             z[:, :, i] = signal_cls(x, y, t)()
@@ -108,6 +109,7 @@ def construct_data(smpl_props, z_array):
         Y = np.arange(0, smpl_props.y_max, smpl_props.dy)
         x, y = np.meshgrid(X, Y, indexing='ij')
         z = z_array
+        sample_props = smpl_props
 
         print('constructed signal shape', z.shape)
 

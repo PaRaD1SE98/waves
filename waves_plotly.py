@@ -2,6 +2,7 @@ import numpy as np
 import plotly
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 
 
 class Wave:
@@ -99,6 +100,7 @@ assert sfy > 2 * max(Signal.wave_number_y), 'Nyquist: Make sure sampling frequen
 print('z.shape', z.shape)
 data = {'x': x.flatten(), 'y': y.flatten(), 't': t.flatten(), 'z': z.flatten()}
 df = pd.DataFrame(data)
+
 fig = px.scatter_3d(df, 'x', 'y', 'z', animation_frame='t', range_z=(-2, 2))
 fig.update_traces(marker_size=1)
 fig.update_yaxes(
