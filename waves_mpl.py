@@ -142,9 +142,9 @@ plt.colorbar(image[0], label='Amplitude')
 ani2 = animation.FuncAnimation(fig2, change_plot_img, len(T), fargs=(z, image), interval=1000 / fps)
 plt.show()
 
+FREQ = np.arange(0, sft, sft / sp)
 KX = np.arange(-sfx / 2, sfx / 2, sfx / sp)
 KY = np.arange(-sfy / 2, sfy / 2, sfy / sp)
-FREQ = np.arange(0, sft, sft / sp)
 
 fft_result = np.fft.fftn(z)
 abs_fft = np.abs(fft_result)
@@ -179,7 +179,7 @@ def f_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int(v * t_max)
+    return int(round(v * t_max))
 
 
 def update(val):
@@ -197,7 +197,7 @@ def ky_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int((v + sfy / 2) * y_max)
+    return int(round((v + sfy / 2) * y_max))
 
 
 plt.close()
@@ -237,7 +237,7 @@ def kx_val_to_idx(v):
     :param v: slide value
     :rtype: int
     """
-    return int((v + sfx / 2) * x_max)
+    return int(round((v + sfx / 2) * x_max))
 
 
 plt.close()
@@ -271,9 +271,9 @@ kx_slider.on_changed(update_kx)
 plt.show()
 
 # filter parameters
-kx_range = 0, 1
-ky_range = 0, 1
-f_range = 100, 150
+kx_range = 0, 10
+ky_range = 0, 10
+f_range = 0, 40
 
 mask_kx_negative = mask_kx_positive = mask_ky_negative = mask_ky_positive = mask_f = np.zeros((sp, sp, sp))
 mask_kx_negative[kx_val_to_idx(-kx_range[1]):kx_val_to_idx(-kx_range[0]), :, :] = 1
@@ -282,8 +282,99 @@ mask_ky_negative[:, ky_val_to_idx(-ky_range[1]):ky_val_to_idx(-ky_range[0]), :] 
 mask_ky_positive[:, ky_val_to_idx(ky_range[0]):ky_val_to_idx(ky_range[1]), :] = 1
 mask_f[:, :, f_val_to_idx(f_range[0]):f_val_to_idx(f_range[1])] = 1
 
-fft_masked = shifted_fft * mask_kx_negative * mask_kx_positive * mask_ky_negative * mask_ky_positive + mask_f
-ifft_result = np.fft.ifftn(np.fft.ifftshift(fft_masked)).real
+fft_masked = shifted_fft * mask_kx_negative * mask_kx_positive * mask_ky_negative * mask_ky_positive * mask_f
+abs_fft_masked = np.abs(fft_masked)
+
+fig3 = plt.figure()
+ax3 = fig3.add_subplot()
+ax3.set_xlabel('Kx')
+ax3.set_ylabel('Ky')
+Kx, Ky = np.meshgrid(KX, KY, indexing='ij')
+image_fft = ax3.pcolormesh(Kx, Ky, abs_fft_masked[:, :, 0], cmap='viridis')
+# no need to limit valid range because done by shifting the result
+# plt.xlim(-sfx / 2, sfx / 2)
+# plt.ylim(-sfy / 2, sfy / 2)
+# ax3.set_aspect(x / y)
+fig3.colorbar(image_fft, label='Amplitude')
+fig3.subplots_adjust(bottom=0.25)
+ax_freq = plt.axes([0.20, 0.05, 0.65, 0.06])
+freq_slider = Slider(
+    ax=ax_freq,
+    label='Freq',
+    valmin=0,
+    valmax=sft / 2,
+    valinit=0,
+    valstep=sft / sp,
+)
+
+
+def update(val):
+    ax3.pcolormesh(Kx, Ky, abs_fft_masked[:, :, f_val_to_idx(val)], cmap='viridis')
+    fig3.canvas.draw_idle()
+
+
+freq_slider.on_changed(update)
+plt.show()
+
+fig4 = plt.figure()
+ax4 = fig4.add_subplot()
+ax4.set_xlabel('Kx')
+ax4.set_ylabel('Freq')
+Kx, Freq = np.meshgrid(KX, FREQ, indexing='ij')
+image_fft_ky = ax4.pcolormesh(Kx, Freq, abs_fft_masked[:, ky_val_to_idx(0), :], cmap='viridis')
+plt.ylim(0, sft / 2)  # set valid frequency window
+# ax4.set_aspect(x / y)
+fig4.colorbar(image_fft_ky, label='Amplitude')
+fig4.subplots_adjust(bottom=0.25)
+ax_ky = plt.axes([0.20, 0.05, 0.65, 0.06])
+ky_slider = Slider(
+    ax=ax_ky,
+    label='ky',
+    valmin=-sfy / 2,
+    valmax=sfy / 2,
+    valinit=0,
+    valstep=sfy / sp,
+)
+
+
+def update_ky(val):
+    ax4.pcolormesh(Kx, Freq, abs_fft_masked[:, ky_val_to_idx(val), :], cmap='viridis')
+    fig4.canvas.draw_idle()
+
+
+ky_slider.on_changed(update_ky)
+plt.show()
+
+fig5 = plt.figure()
+ax5 = fig5.add_subplot()
+ax5.set_xlabel('Ky')
+ax5.set_ylabel('Freq')
+Ky, Freq = np.meshgrid(KY, FREQ, indexing='ij')
+image_fft_kx = ax5.pcolormesh(Ky, Freq, abs_fft_masked[kx_val_to_idx(0), :, :], cmap='viridis')
+plt.ylim(0, sft / 2)  # set valid frequency window
+# ax5.set_aspect(x / y)
+plt.colorbar(image_fft_kx, label='Amplitude')
+plt.subplots_adjust(bottom=0.25)
+ax_kx = plt.axes([0.20, 0.05, 0.65, 0.06])
+kx_slider = Slider(
+    ax=ax_kx,
+    label='kx',
+    valmin=-sfx / 2,
+    valmax=sfx / 2,
+    valinit=0,
+    valstep=sfx / sp,
+)
+
+
+def update_kx(val):
+    ax5.pcolormesh(Ky, Freq, abs_fft_masked[kx_val_to_idx(val), :, :], cmap='viridis')
+    fig5.canvas.draw_idle()
+
+
+kx_slider.on_changed(update_kx)
+plt.show()
+
+ifft_result = np.fft.ifftn(np.fft.ifftshift(fft_masked, axes=(0, 1))).real
 
 
 def change_plot_img(frame_number, z_array, plot):
