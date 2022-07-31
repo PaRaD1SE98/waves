@@ -4,7 +4,17 @@ import plotly
 from plotly import express as px
 
 
-def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+    """
+
+    :param fft:
+    :param shifted_fft: data array
+    :param title: graph title
+    :param c_scale_lim: limit the color scale
+    :param aspect_ratio: available values:
+    'as_sample': good when value scale in two plotting dimensions is very different,
+    'as_value': good when sampling size in two plotting dimensions is very different,
+    """
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -18,8 +28,8 @@ def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_rat
         df_fft, 'kx', 'freq', 'amplitude',
         title=title,
         animation_frame='ky',
-        nbinsx=smpl_props.sp[1],
-        nbinsy=smpl_props.sp[0],
+        nbinsx=fft.smpl_props.spx,
+        nbinsy=fft.smpl_props.spt,
         range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
                      shifted_fft[p_max[0], p_max[1], p_max[2]]] if c_scale_lim else None,
         color_continuous_scale=plotly.colors.sequential.Viridis

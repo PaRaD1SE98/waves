@@ -8,7 +8,7 @@ def f_val_to_idx(smpl_props, v):
     return int(round(v * smpl_props.t_max))
 
 
-def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
     kx, ky, freq = np.meshgrid(fft.KX, fft.KY, fft.FREQ, indexing='ij')
@@ -62,8 +62,8 @@ def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_rat
         df, x='kx', y='ky', z='amplitude',
         title=title,
         animation_frame='frequency',
-        nbinsx=smpl_props.sp[1],
-        nbinsy=smpl_props.sp[2],
+        nbinsx=fft.smpl_props.spx,
+        nbinsy=fft.smpl_props.spy,
         range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
                      shifted_fft[p_max[0], p_max[1], p_max[2]]] if c_scale_lim else None,
         color_continuous_scale=plotly.colors.sequential.Viridis

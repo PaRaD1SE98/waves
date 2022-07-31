@@ -2,25 +2,26 @@ import numpy as np
 
 
 class FFT:
-    def __init__(self, smpl_props):
-        self.FREQ = np.arange(0, smpl_props.sft, smpl_props.sft / smpl_props.sp[0])
-        self.KX = np.arange(-smpl_props.sfx / 2, smpl_props.sfx / 2, smpl_props.sfx / smpl_props.sp[1])
-        self.KY = np.arange(-smpl_props.sfy / 2, smpl_props.sfy / 2, smpl_props.sfy / smpl_props.sp[2])
-        self.smpl_props = smpl_props
+    """
+    Construct the FFT results matrix with useful dimension parameters and sampling properties
+    """
 
-    def __call__(self, z):
-        fft_result = np.fft.fftn(z)
-        abs_fft = np.abs(fft_result)
-        shifted_fft = np.fft.fftshift(fft_result, axes=(0, 1))
-        shifted_abs_fft = np.fft.fftshift(abs_fft, axes=(0, 1))
-        self.fft_result = fft_result
-        self.abs_fft = abs_fft
-        self.shifted_fft = shifted_fft
-        self.shifted_abs_fft = shifted_abs_fft
-        return fft_result, abs_fft, shifted_fft, shifted_abs_fft
+    def __init__(self, data):
+        self.FREQ = np.arange(0, data.sample_props.sft, data.sample_props.sft / data.sample_props.sp[0])
+        self.KX = np.arange(-data.sample_props.sfx / 2, data.sample_props.sfx / 2, data.sample_props.sfx / data.sample_props.sp[1])
+        self.KY = np.arange(-data.sample_props.sfy / 2, data.sample_props.sfy / 2, data.sample_props.sfy / data.sample_props.sp[2])
+        self.smpl_props = data.sample_props
+        self.fft_result = np.fft.fftn(data.z)
+        self.abs_fft = np.abs(self.fft_result)
+        self.shifted_fft = np.fft.fftshift(self.fft_result, axes=(0, 1))
+        self.shifted_abs_fft = np.fft.fftshift(self.abs_fft, axes=(0, 1))
 
 
 class Mask:
+    """
+    Construct a filter mask for the FFT results
+    """
+
     def __init__(self, smpl_props, f_range=None, kx_range=None, ky_range=None):
         self.smpl_props = smpl_props
         if f_range is None:

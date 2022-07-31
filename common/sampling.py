@@ -1,4 +1,8 @@
 class SamplingProperties:
+    """
+    Construct useful sampling parameters from sampling points and max distance
+    """
+
     def __init__(self,
                  sp,
                  t_max=None,

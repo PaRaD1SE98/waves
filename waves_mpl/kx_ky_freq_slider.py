@@ -7,7 +7,7 @@ def f_val_to_idx(smpl_props, v):
     return int(round(v * smpl_props.t_max))
 
 
-def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -36,14 +36,14 @@ def plot(smpl_props, fft, shifted_fft, title=None, c_scale_lim=False, aspect_rat
         ax=ax_freq,
         label='Freq',
         valmin=0,
-        valmax=smpl_props.sft / 2,
+        valmax=fft.smpl_props.sft / 2,
         valinit=0,
-        valstep=smpl_props.sft / smpl_props.sp[0],
+        valstep=fft.smpl_props.sft / fft.smpl_props.sp[0],
     )
 
     def update(val):
         ax.pcolormesh(
-            kx, ky, shifted_fft[:, :, f_val_to_idx(smpl_props, val)], cmap='viridis',
+            kx, ky, shifted_fft[:, :, f_val_to_idx(fft.smpl_props, val)], cmap='viridis',
             vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
             vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
         )
