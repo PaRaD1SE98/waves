@@ -15,7 +15,7 @@ def plot(data, fps=10):
                              color_continuous_scale=plotly.colors.sequential.Viridis)
     fig.update_yaxes(
         scaleanchor="x",
-        scaleratio=1,
+        scaleratio=data.sample_props.x_max/data.sample_props.y_max,
     )
     # animation speed settings
     fig.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1000 / fps  # ms

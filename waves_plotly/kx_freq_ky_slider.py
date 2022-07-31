@@ -4,7 +4,7 @@ import plotly
 from plotly import express as px
 
 
-def plot(smpl_props, fft, shifted_fft):
+def plot(smpl_props, fft, shifted_fft, c_scale_lim=False):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -14,13 +14,15 @@ def plot(smpl_props, fft, shifted_fft):
                 'freq': freq.flatten(),
                 'amplitude': shifted_fft.flatten()}
     df_fft = pd.DataFrame(data_fft)
-    fig = px.density_heatmap(df_fft, 'kx', 'freq', 'amplitude',
-                              animation_frame='ky',
-                              nbinsx=smpl_props.sp[1],
-                              nbinsy=smpl_props.sp[0],
-                              range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
-                                           shifted_fft[p_max[0], p_max[1], p_max[2]]],
-                              color_continuous_scale=plotly.colors.sequential.Viridis)
+    fig = px.density_heatmap(
+        df_fft, 'kx', 'freq', 'amplitude',
+        animation_frame='ky',
+        nbinsx=smpl_props.sp[1],
+        nbinsy=smpl_props.sp[0],
+        range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
+                     shifted_fft[p_max[0], p_max[1], p_max[2]]] if c_scale_lim else None,
+        color_continuous_scale=plotly.colors.sequential.Viridis
+    )
     fig.update_yaxes(
         scaleanchor="x",
         scaleratio=1,

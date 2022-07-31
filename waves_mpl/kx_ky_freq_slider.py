@@ -7,7 +7,7 @@ def f_val_to_idx(smpl_props, v):
     return int(round(v * smpl_props.t_max))
 
 
-def plot(smpl_props, fft, shifted_fft):
+def plot(smpl_props, fft, shifted_fft, c_scale_lim=False):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -16,9 +16,11 @@ def plot(smpl_props, fft, shifted_fft):
     ax.set_xlabel('Kx')
     ax.set_ylabel('Ky')
     kx, ky = np.meshgrid(fft.KX, fft.KY, indexing='ij')
-    image_fft = ax.pcolormesh(kx, ky, shifted_fft[:, :, 0], cmap='viridis',
-                              vmin=shifted_fft[p_min[0], p_min[1], p_min[2]],
-                              vmax=shifted_fft[p_max[0], p_max[1], p_max[2]])
+    image_fft = ax.pcolormesh(
+        kx, ky, shifted_fft[:, :, 0], cmap='viridis',
+        vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
+        vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
+    )
     # plt.xlim(-sfx / 2, sfx / 2)
     # plt.ylim(-sfy / 2, sfy / 2)
     # ax.set_aspect(x / y)
@@ -35,9 +37,11 @@ def plot(smpl_props, fft, shifted_fft):
     )
 
     def update(val):
-        ax.pcolormesh(kx, ky, shifted_fft[:, :, f_val_to_idx(smpl_props, val)], cmap='viridis',
-                      vmin=shifted_fft[p_min[0], p_min[1], p_min[2]],
-                      vmax=shifted_fft[p_max[0], p_max[1], p_max[2]])
+        ax.pcolormesh(
+            kx, ky, shifted_fft[:, :, f_val_to_idx(smpl_props, val)], cmap='viridis',
+            vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
+            vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
+        )
         fig.canvas.draw_idle()
 
     freq_slider.on_changed(update)

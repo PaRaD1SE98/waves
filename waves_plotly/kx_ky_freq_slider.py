@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import plotly
-import plotly.graph_objects as go
 from plotly import express as px
 
 
@@ -9,7 +8,7 @@ def f_val_to_idx(smpl_props, v):
     return int(round(v * smpl_props.t_max))
 
 
-def plot(smpl_props, fft, shifted_fft):
+def plot(smpl_props, fft, shifted_fft, c_scale_lim=False):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
     kx, ky, freq = np.meshgrid(fft.KX, fft.KY, fft.FREQ, indexing='ij')
@@ -59,13 +58,15 @@ def plot(smpl_props, fft, shifted_fft):
     #     yaxis=dict(range=[0, data.sample_props.y_max]),
     #     sliders=sliders
     # )
-    fig = px.density_heatmap(df, x='kx', y='ky', z='amplitude',
-                             animation_frame='frequency',
-                             nbinsx=smpl_props.sp[1],
-                             nbinsy=smpl_props.sp[2],
-                             range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
-                                          shifted_fft[p_max[0], p_max[1], p_max[2]]],
-                             color_continuous_scale=plotly.colors.sequential.Viridis)
+    fig = px.density_heatmap(
+        df, x='kx', y='ky', z='amplitude',
+        animation_frame='frequency',
+        nbinsx=smpl_props.sp[1],
+        nbinsy=smpl_props.sp[2],
+        range_color=[shifted_fft[p_min[0], p_min[1], p_min[2]],
+                     shifted_fft[p_max[0], p_max[1], p_max[2]]] if c_scale_lim else None,
+        color_continuous_scale=plotly.colors.sequential.Viridis
+    )
     fig.update_yaxes(
         scaleanchor="x",
         scaleratio=1,

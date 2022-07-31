@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     # construct data
     # set sampling properties
-    sr = 5000000  # Hz
+    sr = 5000000  # sampling rate Hz
     spx = 365 + 1  # sampling size x
     spy = 32 + 1  # sampling size y
     spt = 1000  # sampling size t
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     fft_result, abs_fft, shifted_fft, shifted_abs_fft = fft(data.z)
 
     # # plot fft result in 3 directions with slider
-    lib.kx_ky_freq_slider.plot(smpl_props, fft, shifted_abs_fft)
+    lib.kx_ky_freq_slider.plot(smpl_props, fft, shifted_abs_fft, c_scale_lim=True)
     lib.kx_freq_ky_slider.plot(smpl_props, fft, shifted_abs_fft)
     lib.ky_freq_kx_slider.plot(smpl_props, fft, shifted_abs_fft)
 
@@ -53,19 +53,20 @@ if __name__ == '__main__':
     # todo: improve mask flexibility.
     # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
     mask = Mask(smpl_props,
-                f_range=(2409, 2501),
-                kx_range=(-.01, .01),
-                ky_range=(-.01, .01))()
+                f_range=None,
+                kx_range=(0, 0.1),
+                ky_range=None)()
 
     # plot mask shape in 3d space
-    lib.mask_3d.plot(fft, mask)
+    if smpl_props.sp[0] * smpl_props.sp[1] * smpl_props.sp[2] <= 128 ** 3:
+        lib.mask_3d.plot(fft, mask)
 
     # do filter
     fft_masked = shifted_fft * mask
     abs_fft_masked = np.abs(fft_masked)
 
     # plot filtered fft result in 3 directions with slider
-    lib.kx_ky_freq_slider.plot(smpl_props, fft, abs_fft_masked)
+    lib.kx_ky_freq_slider.plot(smpl_props, fft, abs_fft_masked, c_scale_lim=True)
     lib.kx_freq_ky_slider.plot(smpl_props, fft, abs_fft_masked)
     lib.ky_freq_kx_slider.plot(smpl_props, fft, abs_fft_masked)
 
