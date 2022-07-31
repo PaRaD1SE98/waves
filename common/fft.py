@@ -6,12 +6,17 @@ class FFT:
         self.FREQ = np.arange(0, smpl_props.sft, smpl_props.sft / smpl_props.sp)
         self.KX = np.arange(-smpl_props.sfx / 2, smpl_props.sfx / 2, smpl_props.sfx / smpl_props.sp)
         self.KY = np.arange(-smpl_props.sfy / 2, smpl_props.sfy / 2, smpl_props.sfy / smpl_props.sp)
+        self.smpl_props = smpl_props
 
     def __call__(self, z):
         fft_result = np.fft.fftn(z)
         abs_fft = np.abs(fft_result)
         shifted_fft = np.fft.fftshift(fft_result, axes=(0, 1))
         shifted_abs_fft = np.fft.fftshift(abs_fft, axes=(0, 1))
+        self.fft_result = fft_result
+        self.abs_fft = abs_fft
+        self.shifted_fft = shifted_fft
+        self.shifted_abs_fft = shifted_abs_fft
         return fft_result, abs_fft, shifted_fft, shifted_abs_fft
 
 
@@ -38,27 +43,29 @@ class Mask:
         return int(round((v + self.smpl_props.sfy / 2) * self.smpl_props.y_max))
 
     def __call__(self):
-        mask = np.zeros((self.smpl_props.sp, self.smpl_props.sp, self.smpl_props.sp))
         # data points inside the frequency range set to 1
-        mask[
-            :,
-            :,
-            self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
+        mask_f = np.zeros((self.smpl_props.sp, self.smpl_props.sp, self.smpl_props.sp))
+        mask_f[
+        :,
+        :,
+        self.f_val_to_idx(self.f_range[0]):self.f_val_to_idx(self.f_range[1])
         ] = 1
 
-        # for kx and ky, need to filter mirror part together
+        # for kx and ky, filter mirror part together
+        mask_k = np.zeros((self.smpl_props.sp, self.smpl_props.sp, self.smpl_props.sp))
         # higher limit
         # lower than higher limit set to 1
-        mask[
-            self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
-            self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
-            :
+        mask_k[
+        self.kx_val_to_idx(-self.kx_range[1]):self.kx_val_to_idx(self.kx_range[1]),
+        self.ky_val_to_idx(-self.ky_range[1]):self.ky_val_to_idx(self.ky_range[1]),
+        :
         ] = 1
         # lower limit
         # lower than lower limit set to 0
-        mask[
-            self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
-            self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
-            :
+        mask_k[
+        self.kx_val_to_idx(-self.kx_range[0]):self.kx_val_to_idx(self.kx_range[0]),
+        self.ky_val_to_idx(-self.ky_range[0]):self.ky_val_to_idx(self.ky_range[0]),
+        :
         ] = 0
-        return mask
+        # multipy the two mask to get the cross-section
+        return mask_f * mask_k

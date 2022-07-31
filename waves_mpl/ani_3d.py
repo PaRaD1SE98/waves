@@ -22,6 +22,6 @@ def plot(data, fps=10):
                                vmin=data.z[p_min[0], p_min[1], p_min[2]],
                                vmax=data.z[p_max[0], p_max[1], p_max[2]]
                                )]
-    ax.set_zlim(-1, 1)
+    ax.set_zlim(data.z[p_min[0], p_min[1], p_min[2]], data.z[p_max[0], p_max[1], p_max[2]])
     ani = animation.FuncAnimation(fig, change_plot, len(data.T), fargs=(data.z, surface), interval=1000 / fps)
     plt.show()

@@ -3,9 +3,9 @@ import numpy as np
 
 class Wave:
     center = .5, .5  # x, y
-    frequency = 50, 70, 55, 100  # Hz
-    wave_number_x = 40, 80, 90, 100  # 1/m
-    wave_number_y = 40, 80, 90, 100  # 1/m
+    frequency = 15, 20, 25, 30  # Hz
+    wave_number_x = 14, 23, 25, 31  # 1/m
+    wave_number_y = 14, 23, 25, 31  # 1/m
 
     def __init__(self, x, y, t):
         self.x = x
@@ -37,9 +37,9 @@ class Pulse:
     y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
     center = 0, .5  # center coordinate (x, y)
-    frequency = 30, 50, 60  # Hz
-    wave_number_x = 20, 40, 60  # 1/m
-    wave_number_y = 20, 40, 60  # 1/m
+    frequency = 10, 20, 30  # Hz
+    wave_number_x = 10, 20, 30  # 1/m
+    wave_number_y = 10, 20, 30  # 1/m
 
     def __init__(self, x, y, t):
         self.x = x
