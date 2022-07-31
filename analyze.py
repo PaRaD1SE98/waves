@@ -7,7 +7,7 @@ from common.wave_gen import generate_data, property_check, construct_data, Wave,
 if __name__ == '__main__':
     # choose 'matplotlib' or 'plotly' as backend
     # plotly is good when sampling points are not more than 128
-    graphic_backend = 'plotly'
+    graphic_backend = 'matplotlib'
 
     if graphic_backend == 'plotly':
         import waves_plotly as lib
@@ -23,8 +23,8 @@ if __name__ == '__main__':
     data = generate_data(smpl_props, signal)
 
     # plot data in 2 ways
-    # lib.ani_3d.plot(data, smpl_props.sp)
-    # lib.ani_2d.plot(data, smpl_props.sp)
+    lib.ani_3d.plot(data, smpl_props.sp)
+    lib.ani_2d.plot(data, smpl_props.sp)
 
     # do fft
     fft = FFT(smpl_props)
