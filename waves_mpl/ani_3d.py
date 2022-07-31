@@ -1,9 +1,9 @@
-import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot(data, fps=10):
+def plot(data, fps=10, title=None):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
 
@@ -15,6 +15,7 @@ def plot(data, fps=10):
 
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
+    ax.set_title(title)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')

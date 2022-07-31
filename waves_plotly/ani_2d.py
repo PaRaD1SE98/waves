@@ -3,11 +3,12 @@ import plotly
 from plotly import express as px
 
 
-def plot(data, fps=10):
+def plot(data, fps=10, title=None, aspect_ratio=1):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
     x, y, t = np.meshgrid(data.X, data.Y, data.T, indexing='ij')
     fig = px.density_heatmap(x=x.flatten(), y=y.flatten(), z=data.z.flatten(),
+                             title=title,
                              animation_frame=t.flatten(),
                              nbinsx=data.sample_props.sp[1],
                              nbinsy=data.sample_props.sp[2],
@@ -15,7 +16,7 @@ def plot(data, fps=10):
                              color_continuous_scale=plotly.colors.sequential.Viridis)
     fig.update_yaxes(
         scaleanchor="x",
-        scaleratio=data.sample_props.x_max/data.sample_props.y_max,
+        scaleratio=aspect_ratio,
     )
     # animation speed settings
     fig.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1000 / fps  # ms

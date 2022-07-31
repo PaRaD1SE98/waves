@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import numpy as np
 
 
-def plot(data, fps=10):
+def plot(data, fps=10, title=None):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
 
@@ -40,6 +40,12 @@ def plot(data, fps=10):
     )]
 
     fig.update_layout(
+        title=dict(
+            text=title,
+            y=0.9,
+            x=0.5,
+            xanchor='center',
+            yanchor='top'),
         scene=dict(
             xaxis=dict(range=[0, data.sample_props.x_max]),
             yaxis=dict(range=[0, data.sample_props.y_max]),

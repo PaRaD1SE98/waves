@@ -23,17 +23,17 @@ if __name__ == '__main__':
     data = generate_data(smpl_props, signal)
 
     # plot data in 2 ways
-    lib.ani_3d.plot(data, smpl_props.sp[0])
-    lib.ani_2d.plot(data, smpl_props.sp[0])
+    lib.ani_3d.plot(data, smpl_props.spt, 'Visualized Data')
+    lib.ani_2d.plot(data, smpl_props.spt, 'Visualized Data')
 
     # do fft
     fft = FFT(smpl_props)
     fft_result, abs_fft, shifted_fft, shifted_abs_fft = fft(data.z)
 
     # plot fft result in 3 directions with slider
-    lib.kx_ky_freq_slider.plot(smpl_props, fft, shifted_abs_fft)
-    lib.kx_freq_ky_slider.plot(smpl_props, fft, shifted_abs_fft)
-    lib.ky_freq_kx_slider.plot(smpl_props, fft, shifted_abs_fft)
+    lib.kx_ky_freq_slider.plot(smpl_props, fft, shifted_abs_fft, 'FFT Result(ky/kx)', c_scale_lim=True, aspect_ratio='as_sample')
+    lib.kx_freq_ky_slider.plot(smpl_props, fft, shifted_abs_fft, 'FFT Result(frequency/kx)')
+    lib.ky_freq_kx_slider.plot(smpl_props, fft, shifted_abs_fft, 'FFT Result(frequency/ky)')
 
     # plot fft result in 3d space
     if graphic_backend == 'plotly':
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     abs_fft_masked = np.abs(fft_masked)
 
     # plot filtered fft result in 3 directions with slider
-    lib.kx_ky_freq_slider.plot(smpl_props, fft, abs_fft_masked)
-    lib.kx_freq_ky_slider.plot(smpl_props, fft, abs_fft_masked)
-    lib.ky_freq_kx_slider.plot(smpl_props, fft, abs_fft_masked)
+    lib.kx_ky_freq_slider.plot(smpl_props, fft, abs_fft_masked, 'FFT Masked(ky/kx)', c_scale_lim=True, aspect_ratio='as_sample')
+    lib.kx_freq_ky_slider.plot(smpl_props, fft, abs_fft_masked, 'FFT Masked(frequency/kx)')
+    lib.ky_freq_kx_slider.plot(smpl_props, fft, abs_fft_masked, 'FFT Masked(frequency/ky)')
 
     # plot filtered fft result in 3d space
     if graphic_backend == 'plotly':
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     ifft_data = construct_data(smpl_props, ifft)
 
     # plot filtered signal in 2 ways
-    lib.ani_3d.plot(ifft_data, smpl_props.sp[0])
-    lib.ani_2d.plot(ifft_data, smpl_props.sp[0])
+    lib.ani_3d.plot(ifft_data, smpl_props.spt, 'Reconstructed Data')
+    lib.ani_2d.plot(ifft_data, smpl_props.spt, 'Reconstructed Data')
