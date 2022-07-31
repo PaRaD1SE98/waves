@@ -30,7 +30,7 @@ def plot(smpl_props, fft, shifted_fft):
         valmin=-smpl_props.sfx / 2,
         valmax=smpl_props.sfx / 2,
         valinit=0,
-        valstep=smpl_props.sfx / smpl_props.sp,
+        valstep=smpl_props.sfx / smpl_props.sp[1],
     )
 
     def update_kx(val):

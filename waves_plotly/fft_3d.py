@@ -11,7 +11,7 @@ def plot(fft, data):
             z=freq.flatten(),
             value=data.flatten(),
             isomin=1,
-            isomax=fft.smpl_props.sp / 2,
+            isomax=fft.smpl_props.sp[0] / 2,
             opacity=0.2,
             colorscale='Viridis',
             surface_count=5,

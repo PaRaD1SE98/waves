@@ -30,7 +30,7 @@ def plot(smpl_props, fft, shifted_fft):
         valmin=-smpl_props.sfy / 2,
         valmax=smpl_props.sfy / 2,
         valinit=0,
-        valstep=smpl_props.sfy / smpl_props.sp,
+        valstep=smpl_props.sfy / smpl_props.sp[2],
     )
 
     def update_ky(val):

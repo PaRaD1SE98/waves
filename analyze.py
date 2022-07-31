@@ -2,29 +2,29 @@ import numpy as np
 
 from common.fft import FFT, Mask
 from common.sampling import SamplingProperties
-from common.wave_gen import generate_data, property_check, construct_data, Wave, Pulse
+from common.wave_gen import generate_data, property_check, construct_data, Pulse
 
 if __name__ == '__main__':
     # choose 'matplotlib' or 'plotly' as backend
     # plotly is good when sampling points are not more than 128
-    graphic_backend = 'matplotlib'
+    graphic_backend = 'plotly'
 
     if graphic_backend == 'plotly':
         import waves_plotly as lib
     elif graphic_backend == 'matplotlib':
         import waves_mpl as lib
 
-    # choose signal
+    # choose signal or construct data
     signal = Pulse
 
     # set sampling properties
-    smpl_props = SamplingProperties(64, 1, 1, 1)
+    smpl_props = SamplingProperties((64, 64, 64), 1, 1, 1)
     property_check(smpl_props.sft, smpl_props.sfx, smpl_props.sfy, signal)
     data = generate_data(smpl_props, signal)
 
     # plot data in 2 ways
-    lib.ani_3d.plot(data, smpl_props.sp)
-    lib.ani_2d.plot(data, smpl_props.sp)
+    lib.ani_3d.plot(data, smpl_props.sp[0])
+    lib.ani_2d.plot(data, smpl_props.sp[0])
 
     # do fft
     fft = FFT(smpl_props)
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     ifft_data = construct_data(smpl_props, ifft)
 
     # plot filtered signal in 2 ways
-    lib.ani_3d.plot(ifft_data, smpl_props.sp)
-    lib.ani_2d.plot(ifft_data, smpl_props.sp)
+    lib.ani_3d.plot(ifft_data, smpl_props.sp[0])
+    lib.ani_2d.plot(ifft_data, smpl_props.sp[0])

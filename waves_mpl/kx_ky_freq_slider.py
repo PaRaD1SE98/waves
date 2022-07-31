@@ -31,7 +31,7 @@ def plot(smpl_props, fft, shifted_fft):
         valmin=0,
         valmax=smpl_props.sft / 2,
         valinit=0,
-        valstep=smpl_props.sft / smpl_props.sp,
+        valstep=smpl_props.sft / smpl_props.sp[0],
     )
 
     def update(val):

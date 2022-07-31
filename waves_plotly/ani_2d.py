@@ -9,8 +9,8 @@ def plot(data, fps=10):
     x, y, t = np.meshgrid(data.X, data.Y, data.T, indexing='ij')
     fig = px.density_heatmap(x=x.flatten(), y=y.flatten(), z=data.z.flatten(),
                              animation_frame=t.flatten(),
-                             nbinsx=data.sample_props.sp,
-                             nbinsy=data.sample_props.sp,
+                             nbinsx=data.sample_props.sp[1],
+                             nbinsy=data.sample_props.sp[2],
                              range_color=[data.z[p_min[0], p_min[1], p_min[2]], data.z[p_max[0], p_max[1], p_max[2]]],
                              color_continuous_scale=plotly.colors.sequential.Viridis)
     fig.update_yaxes(
