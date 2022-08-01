@@ -3,9 +3,9 @@ import numpy as np
 from common.constructor import construct_data, generate_data, property_check
 from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
-# choose signal or construct data
 from models.waves import Wave
 
+# choose signal or construct data
 signal = Wave
 
 # set sampling properties
