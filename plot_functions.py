@@ -35,7 +35,7 @@ def oxyf():
 
 def oxfy():
     """plot origin fft result freq/kx in 3 directions with ky slider"""
-    lib.kx_freq_ky_slider.plot(fft, fft.shifted_abs_fft, 'FFT_Result(frequency_kx)', output=PLOTLY_OUTPUT)
+    lib.kx_freq_ky_slider.plot(fft, fft.shifted_abs_fft, 'FFT_Result(freq_kx)', output=PLOTLY_OUTPUT)
 
 
 def oyfx():
