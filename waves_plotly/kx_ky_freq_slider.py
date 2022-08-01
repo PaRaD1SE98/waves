@@ -88,4 +88,4 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, out
     fig["layout"].pop("updatemenus")  # optional, drop animation buttons
     fig.show()
     if output:
-        fig.write_html(f'output/kx_ky_freq_{output}.html', include_plotlyjs="cdn")
+        fig.write_html(f'output/{title}_{output}.html', include_plotlyjs="cdn")

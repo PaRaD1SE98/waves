@@ -45,4 +45,4 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, out
             )
     fig.show()
     if output:
-        fig.write_html(f'output/ky_freq_kx_{output}.html', include_plotlyjs="cdn")
+        fig.write_html(f'output/{title}_{output}.html', include_plotlyjs="cdn")

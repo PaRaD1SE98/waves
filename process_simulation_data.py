@@ -3,10 +3,11 @@ import numpy as np
 from common.constructor import construct_data, generate_data, property_check
 from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
+from models.pulses import Pulse
 from models.waves import Wave
 
 # choose signal or construct data
-signal = Wave
+signal = Pulse
 
 # set sampling properties
 props = SamplingProperties((64, 64, 64), 1, 1, 1)

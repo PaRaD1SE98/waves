@@ -31,4 +31,4 @@ def plot(fft, data, title=None, surface_count=10, output=None):
     )
     fig.show()
     if output:
-        fig.write_html(f'output/mask_3d_{output}.html', include_plotlyjs="cdn")
+        fig.write_html(f'output/{title}_{output}.html', include_plotlyjs="cdn")

@@ -23,4 +23,4 @@ def plot(data, fps=10, title=None, aspect_ratio=1, output=None):
     fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 0  # ms
     fig.show()
     if output:
-        fig.write_html(f'output/ani_2d_{output}.html', include_plotlyjs="cdn")
+        fig.write_html(f'output/{title}_{output}.html', include_plotlyjs="cdn")

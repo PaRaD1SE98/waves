@@ -17,12 +17,12 @@ match DATA_SOURCE:
 
 def o2d():
     """plot original data in 2d space"""
-    lib.ani_2d.plot(data, data.sample_props.spt, 'Visualized Data', output=PLOTLY_OUTPUT)
+    lib.ani_2d.plot(data, data.sample_props.spt, 'Visualized_Data_2d', output=PLOTLY_OUTPUT)
 
 
 def o3d():
     """plot original data in 3d space"""
-    lib.ani_3d.plot(data, data.sample_props.spt, 'Visualized Data', output=PLOTLY_OUTPUT)
+    lib.ani_3d.plot(data, data.sample_props.spt, 'Visualized_Data_3d', output=PLOTLY_OUTPUT)
 
 
 """plot origin fft result in 3 directions with slider"""
@@ -30,23 +30,23 @@ def o3d():
 
 def oxyf():
     """plot origin fft result ky/kx in 3 directions with frequency slider"""
-    lib.kx_ky_freq_slider.plot(fft, fft.shifted_abs_fft, 'FFT Result(ky/kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
+    lib.kx_ky_freq_slider.plot(fft, fft.shifted_abs_fft, 'FFT_Result(ky_kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
 
 
 def oxfy():
     """plot origin fft result freq/kx in 3 directions with ky slider"""
-    lib.kx_freq_ky_slider.plot(fft, fft.shifted_abs_fft, 'FFT Result(frequency/kx)', output=PLOTLY_OUTPUT)
+    lib.kx_freq_ky_slider.plot(fft, fft.shifted_abs_fft, 'FFT_Result(frequency_kx)', output=PLOTLY_OUTPUT)
 
 
 def oyfx():
     """plot origin fft result freq/ky in 3 directions with frequency kx slider"""
-    lib.ky_freq_kx_slider.plot(fft, fft.shifted_abs_fft, 'FFT Result(frequency/ky)', output=PLOTLY_OUTPUT)
+    lib.ky_freq_kx_slider.plot(fft, fft.shifted_abs_fft, 'FFT_Result(freq_ky)', output=PLOTLY_OUTPUT)
 
 
 def of3d():
     """plot origin fft result in 3d space"""
     if GRAPHIC_BACKEND == 'plotly':
-        lib.fft_3d.plot(fft, fft.shifted_abs_fft, 'FFT Result 3d', surface_count=10, output=PLOTLY_OUTPUT)
+        lib.fft_3d.plot(fft, fft.shifted_abs_fft, 'FFT_Result_3d', surface_count=10, output=PLOTLY_OUTPUT)
 
 
 """plot fft mask shape in 3d space"""
@@ -55,7 +55,7 @@ def of3d():
 def m3d():
     """plot fft mask shape in 3d space"""
     if data.sample_props.spt * data.sample_props.spx * data.sample_props.spy <= 128 ** 3:
-        lib.mask_3d.plot(fft, mask, 'FFT Mask 3d', surface_count=10, output=PLOTLY_OUTPUT)
+        lib.mask_3d.plot(fft, mask, 'FFT_Mask_3d', surface_count=10, output=PLOTLY_OUTPUT)
 
 
 """plot filtered fft result in 3 directions with slider"""
@@ -63,17 +63,17 @@ def m3d():
 
 def fxyf():
     """plot filtered fft result ky/kx in 3 directions with frequency slider"""
-    lib.kx_ky_freq_slider.plot(fft, abs_fft_masked, 'FFT Masked(ky/kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
+    lib.kx_ky_freq_slider.plot(fft, abs_fft_masked, 'FFT_Masked(ky_kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
 
 
 def fxfy():
     """plot filtered fft result freq/kx in 3 directions with ky slider"""
-    lib.kx_freq_ky_slider.plot(fft, abs_fft_masked, 'FFT Masked(frequency/kx)', output=PLOTLY_OUTPUT)
+    lib.kx_freq_ky_slider.plot(fft, abs_fft_masked, 'FFT_Masked(freq_kx)', output=PLOTLY_OUTPUT)
 
 
 def fyfx():
     """plot filtered fft result freq/ky in 3 directions with kx slider"""
-    lib.ky_freq_kx_slider.plot(fft, abs_fft_masked, 'FFT Masked(frequency/ky)', output=PLOTLY_OUTPUT)
+    lib.ky_freq_kx_slider.plot(fft, abs_fft_masked, 'FFT_Masked(freq_ky)', output=PLOTLY_OUTPUT)
 
 
 """plot filtered fft result in 3d space"""
@@ -82,7 +82,7 @@ def fyfx():
 def ff3d():
     """plot filtered fft result in 3d space"""
     if GRAPHIC_BACKEND == 'plotly':
-        lib.fft_3d.plot(fft, abs_fft_masked, 'FFT Filtered 3d', surface_count=10, output=PLOTLY_OUTPUT)
+        lib.fft_3d.plot(fft, abs_fft_masked, 'FFT_Filtered_3d', surface_count=10, output=PLOTLY_OUTPUT)
 
 
 """plot filtered signal in 2 ways"""
@@ -90,12 +90,12 @@ def ff3d():
 
 def f2d():
     """plot filtered data in 2d space"""
-    lib.ani_2d.plot(ifft_data, ifft_data.sample_props.spt, 'Filtered Data', output=PLOTLY_OUTPUT)
+    lib.ani_2d.plot(ifft_data, ifft_data.sample_props.spt, 'Filtered_Data_2d', output=PLOTLY_OUTPUT)
 
 
 def f3d():
     """plot filtered data in 3d space"""
-    lib.ani_3d.plot(ifft_data, ifft_data.sample_props.spt, 'Filtered Data', output=PLOTLY_OUTPUT)
+    lib.ani_3d.plot(ifft_data, ifft_data.sample_props.spt, 'Filtered_Data_3d', output=PLOTLY_OUTPUT)
 
 
 o_plots = [o2d, o3d]

@@ -60,4 +60,4 @@ def plot(data, fps=10, title=None, output=None):
     )
     fig.show()
     if output:
-        fig.write_html(f'output/ani_3d_{output}.html', include_plotlyjs="cdn")
+        fig.write_html(f'output/{title}_{output}.html', include_plotlyjs="cdn")
