@@ -7,7 +7,7 @@ from models.pulses import Pulse
 from models.waves import Wave
 
 # choose signal or construct data
-signal = Pulse
+signal = Wave
 
 # set sampling properties
 props = SamplingProperties((64, 64, 64), 1, 1, 1)
