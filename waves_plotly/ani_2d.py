@@ -3,7 +3,7 @@ import plotly
 from plotly import express as px
 
 
-def plot(data, fps=10, title=None, aspect_ratio=1):
+def plot(data, fps=10, title=None, aspect_ratio=1, output=None):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
     x, y, t = np.meshgrid(data.X, data.Y, data.T, indexing='ij')
@@ -22,3 +22,5 @@ def plot(data, fps=10, title=None, aspect_ratio=1):
     fig.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1000 / fps  # ms
     fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 0  # ms
     fig.show()
+    if output:
+        fig.write_html(f'output/ani_2d_{output}.html', include_plotlyjs="cdn")

@@ -1,11 +1,12 @@
-# choose signal or construct data
 import numpy as np
 
+from common.constructor import construct_data, generate_data, property_check
 from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
-from common.wave_gen import construct_data, generate_data, property_check, Pulse
+# choose signal or construct data
+from models.waves import Wave
 
-signal = Pulse
+signal = Wave
 
 # set sampling properties
 props = SamplingProperties((64, 64, 64), 1, 1, 1)
@@ -19,7 +20,7 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
-mask = Mask(data.sample_props, (10, 31), (10, 31), (10, 31))()
+mask = Mask(fft, (17, 25), (10, 30), (10, 30))()
 
 # do filter
 fft_masked = fft.shifted_fft * mask

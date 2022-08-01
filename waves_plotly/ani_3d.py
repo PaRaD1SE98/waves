@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import numpy as np
 
 
-def plot(data, fps=10, title=None):
+def plot(data, fps=10, title=None, output=None):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
 
@@ -58,5 +58,6 @@ def plot(data, fps=10, title=None):
         scene_aspectratio=dict(x=1, y=1, z=1),
         sliders=sliders
     )
-
     fig.show()
+    if output:
+        fig.write_html(f'output/ani_3d_{output}.html', include_plotlyjs="cdn")

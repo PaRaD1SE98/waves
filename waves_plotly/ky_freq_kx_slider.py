@@ -5,7 +5,7 @@ import plotly
 from plotly import express as px
 
 
-def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, output=None):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -18,6 +18,7 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
 
     fig = px.density_heatmap(
         df_fft, 'ky', 'freq', 'amplitude',
+        range_y=[0, fft.smpl_props.sft / 2],
         title=title,
         animation_frame='kx',
         nbinsx=fft.smpl_props.sp[2],
@@ -43,3 +44,5 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
                 scaleratio=aspect_ratio,
             )
     fig.show()
+    if output:
+        fig.write_html(f'output/ky_freq_kx_{output}.html', include_plotlyjs="cdn")

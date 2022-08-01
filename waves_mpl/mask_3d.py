@@ -2,9 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot(fft, data):
+def plot(fft, data, title=None, **kwargs):
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
+    ax.set_title(title)
     ax.set_xlabel('kx')
     ax.set_ylabel('ky')
     ax.set_zlabel('f')

@@ -8,13 +8,14 @@ def f_val_to_idx(smpl_props, v):
     return int(round(v * smpl_props.t_max))
 
 
-def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, output=None):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
-    kx, ky, freq = np.meshgrid(fft.KX, fft.KY, fft.FREQ, indexing='ij')
+    FREQ = np.linspace(0, fft.smpl_props.sft / 2, int(fft.smpl_props.spt / 2))
+    kx, ky, freq = np.meshgrid(fft.KX, fft.KY, FREQ, indexing='ij')
     data = {'kx': kx.flatten(),
             'ky': ky.flatten(),
-            'amplitude': shifted_fft.flatten(),
+            'amplitude': shifted_fft[:, :, 0:int(fft.smpl_props.spt / 2)].flatten(),
             'frequency': freq.flatten()}
     df = pd.DataFrame(data)
     # fig = go.Figure()
@@ -86,3 +87,5 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
             )
     fig["layout"].pop("updatemenus")  # optional, drop animation buttons
     fig.show()
+    if output:
+        fig.write_html(f'output/kx_ky_freq_{output}.html', include_plotlyjs="cdn")

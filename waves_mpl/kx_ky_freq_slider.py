@@ -2,12 +2,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Slider
 
-
-def f_val_to_idx(smpl_props, v):
-    return int(round(v * smpl_props.t_max))
+from common.utils import to_idx
 
 
-def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
+def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **kwargs):
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
@@ -43,7 +41,7 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None):
 
     def update(val):
         ax.pcolormesh(
-            kx, ky, shifted_fft[:, :, f_val_to_idx(fft.smpl_props, val)], cmap='viridis',
+            kx, ky, shifted_fft[:, :, to_idx(fft.FREQ, val)], cmap='viridis',
             vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
             vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
         )

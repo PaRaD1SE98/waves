@@ -1,0 +1,37 @@
+import numpy as np
+
+
+class Pulse:
+    """
+    y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
+    """
+    center = 0, .5  # center coordinate (x, y)
+    frequency = 10, 20, 30  # Hz
+    wave_number_x = 10, 20, 30  # 1/m
+    wave_number_y = 10, 20, 30  # 1/m
+
+    def __init__(self, x, y, t):
+        self.x = x
+        self.y = y
+        self.t = t
+
+    def __call__(self, *args, **kwargs):
+        p = np.exp(
+            - (np.sqrt(
+                (2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 +
+                (2 * np.pi * self.wave_number_y[0] * (self.y - self.center[1])) ** 2
+            ) - 2 * np.pi * self.frequency[0] * self.t) ** 2
+        )
+        p *= np.sin(
+            np.sqrt(
+                (2 * np.pi * self.wave_number_x[1] * (self.x - self.center[0])) ** 2 +
+                (2 * np.pi * self.wave_number_y[1] * (self.y - self.center[1])) ** 2
+            ) - 2 * np.pi * self.frequency[1] * self.t
+        ) + \
+             np.cos(
+                 np.sqrt(
+                     (2 * np.pi * self.wave_number_x[2] * (self.x - self.center[0])) ** 2 +
+                     (2 * np.pi * self.wave_number_y[2] * (self.y - self.center[1])) ** 2
+                 ) - 2 * np.pi * self.frequency[2] * self.t
+             )
+        return p / 2

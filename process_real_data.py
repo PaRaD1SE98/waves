@@ -3,7 +3,7 @@ import numpy as np
 from common.data_reader import fread
 from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
-from common.wave_gen import construct_data, down_sampling
+from common.constructor import construct_data, down_sampling
 
 # construct data
 # set sampling properties from data description
@@ -31,7 +31,7 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
-mask = Mask(data.sample_props,
+mask = Mask(fft,
             f_range=None,
             kx_range=(0, 0.1),
             ky_range=None)()

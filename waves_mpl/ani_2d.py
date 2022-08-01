@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt, animation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def plot(data, fps=10, title=None, aspect_ratio=1):
+def plot(data, fps=10, title=None, aspect_ratio=1, **kwargs):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
 
