@@ -3,23 +3,6 @@ from copy import deepcopy
 import numpy as np
 
 
-def property_check(sft, sfx, sfy, signal_cls):
-    """
-    Nyquist check
-
-    :param sft: sample temporal frequency
-    :param sfx: sample spacial frequency x
-    :param sfy: sample spacial frequency y
-    :param signal_cls: the signal class
-    """
-    assert sft > 2 * max(
-        signal_cls.frequency), f'Nyquist: Make sure sampling frequency(current:{sft}) > 2 * highest frequency of the signal(current:{2 * max(signal_cls.frequency)})'
-    assert sfx > 2 * max(
-        signal_cls.wave_number_x), f'Nyquist: Make sure sampling frequency(current:{sfx}) > 2 * highest frequency of the signal(current:{2 * max(signal_cls.frequency)})'
-    assert sfy > 2 * max(
-        signal_cls.wave_number_y), f'Nyquist: Make sure sampling frequency(current:{sfy}) > 2 * highest frequency of the signal(current:{2 * max(signal_cls.frequency)})'
-
-
 def generate_data(smpl_props, signal_cls):
     class Data:
         T = np.linspace(0, smpl_props.t_max, smpl_props.spt)

@@ -2,9 +2,9 @@ from settings import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT
 
 match GRAPHIC_BACKEND:
     case 'matplotlib':
-        import waves_mpl as lib
+        import lib_mpl as lib
     case 'plotly':
-        import waves_plotly as lib
+        import lib_plotly as lib
 
 match DATA_SOURCE:
     case 'real':
