@@ -6,4 +6,4 @@ PLOTLY_OUTPUT = False
 # 'simulation' or 'real'
 DATA_SOURCE = 'simulation'
 # 'pulse' or 'wave'
-SIMULATION_TYPE = 'wave'
+SIMULATION_TYPE = 'pulse'
