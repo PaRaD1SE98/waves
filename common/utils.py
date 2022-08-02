@@ -32,4 +32,7 @@ class WaveFactory(metaclass=WaveMetaclass):
         self.t = t
 
     def __call__(self):
+        return self.wave_func()
+
+    def wave_func(self):
         raise NotImplementedError()

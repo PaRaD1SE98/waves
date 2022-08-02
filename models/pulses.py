@@ -1,6 +1,6 @@
 import numpy as np
 
-from common.utils import WaveFactory, WaveMetaclass
+from common.utils import WaveFactory
 
 
 class Pulse(WaveFactory):
@@ -12,7 +12,7 @@ class Pulse(WaveFactory):
     wave_number_x = 10, 20, 30  # 1/m
     wave_number_y = 10, 20, 30  # 1/m
 
-    def __call__(self):
+    def wave_func(self):
         p = np.exp(
             - (np.sqrt(
                 (2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 +

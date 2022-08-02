@@ -4,12 +4,15 @@ from common.utils import WaveFactory
 
 
 class Wave(WaveFactory):
+    """
+    Periodic waves superposed on each other.
+    """
     center = .5, .5  # x, y
     frequency = 15, 20, 25, 30  # Hz
     wave_number_x = 14, 23, 25, 31  # 1/m
     wave_number_y = 14, 23, 25, 31  # 1/m
 
-    def __call__(self):
+    def wave_func(self):
         w = np.sin(
             np.sqrt((2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 + (
                     2 * np.pi * self.wave_number_y[0] * (self.y - self.center[1])) ** 2) - 2 * np.pi *
