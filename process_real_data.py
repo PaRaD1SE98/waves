@@ -18,6 +18,7 @@ t_max = spt / sr
 x_max = spx * dx
 y_max = spy * dy
 raw_data = fread('data/wave.dat', spx, spy, spt)
+
 props = SamplingProperties((spt, spx, spy), t_max, x_max, y_max)
 data = construct_data(props, raw_data)
 

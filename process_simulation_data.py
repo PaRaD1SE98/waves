@@ -1,17 +1,20 @@
 import numpy as np
 
-from common.constructor import construct_data, generate_data, property_check
+from common.constructor import construct_data, generate_data
 from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
 from models.pulses import Pulse
 from models.waves import Wave
+from settings import SIMULATION_TYPE
 
-# choose signal or construct data
-signal = Wave
+match SIMULATION_TYPE:
+    case 'pulse':
+        signal = Pulse
+    case 'wave':
+        signal = Wave
 
 # set sampling properties
 props = SamplingProperties((64, 64, 64), 1, 1, 1)
-property_check(props.sft, props.sfx, props.sfy, signal)
 data = generate_data(props, signal)
 
 # do fft

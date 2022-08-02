@@ -30,7 +30,7 @@ def generate_data(smpl_props, signal_cls):
         sample_props = smpl_props
 
         for i, t in enumerate(T):
-            z[:, :, i] = signal_cls(x, y, t)()
+            z[:, :, i] = signal_cls(smpl_props, x, y, t)()
 
         print('generated signal shape', z.shape)
 
@@ -76,10 +76,9 @@ def down_sampling(data_cls,
     :param new_expect_spt: new expected sample points in t
     :param new_expect_spx: new expected sample points in x
     :param new_expect_spy: new expected sample points in y
-    :param sample_interval_t: points between each new sample in t
-    :param sample_interval_x: points between each new sample in x
-    :param sample_interval_y: points between each new sample in y
-    :return:
+    :param sample_interval_t: sample points between each new sample in t
+    :param sample_interval_x: sample points between each new sample in x
+    :param sample_interval_y: sample points between each new sample in y
     """
 
     class Data:

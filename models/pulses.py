@@ -1,21 +1,18 @@
 import numpy as np
 
+from common.utils import WaveFactory, WaveMetaclass
 
-class Pulse:
+
+class Pulse(WaveFactory):
     """
     y=exp(-(sqrt(x^2+y^2)-t)^2) * (sin(sqrt(x^2+y^2)-t)+cos(sqrt(x^2+y^2)-t))
     """
-    center = 0, .5  # center coordinate (x, y)
+    center = .5, .5  # center coordinate (x, y)
     frequency = 10, 20, 30  # Hz
     wave_number_x = 10, 20, 30  # 1/m
     wave_number_y = 10, 20, 30  # 1/m
 
-    def __init__(self, x, y, t):
-        self.x = x
-        self.y = y
-        self.t = t
-
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
         p = np.exp(
             - (np.sqrt(
                 (2 * np.pi * self.wave_number_x[0] * (self.x - self.center[0])) ** 2 +
