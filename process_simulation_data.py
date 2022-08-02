@@ -12,6 +12,8 @@ match SIMULATION_TYPE:
         signal = Pulse
     case 'wave':
         signal = Wave
+    case _:
+        raise ValueError('Unknown SIMULATION_TYPE: {}'.format(SIMULATION_TYPE))
 
 # set sampling properties
 props = SamplingProperties((64, 64, 64), 1, 1, 1)
