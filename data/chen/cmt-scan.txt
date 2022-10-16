@@ -1,0 +1,16 @@
+Nx=119 , Ny=120 , N=14520
+dx= 0.687mm , dy= 0.696mm 
+X-intvl=83 Y-intvl=84
+X0=11870 Y0=-16738
+R to Target  = 0.535m
+LaserFREQ=500Hz  SetPower=60 (CP2) 
+Polymer=1000 (CP2
+A/D Data length =1000, Sample Rate = 10000000, Vertical Range (Volt)p-p = 4.000)
+Start=14:35:34 End=14:37:30 2021/03/04
+Photo-Nx=59089 Photo-Ny=44500
+JpgX0=1967JpgY0=1739
+Pixcel-X=2592 Pixcel-Y=1944
+AVE=4 CONT=1 Ymirror=+
+ScanPattern=2
+A/D device=5122 store bit=16 LaserName=CP2
+A/D Data length =1000, Sample Rate = 10000000, Vertical Range (Volt)p-p = 4.000

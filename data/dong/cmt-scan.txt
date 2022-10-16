@@ -1,0 +1,16 @@
+Nx=365 , Ny=32 , N=12078
+dx= 0.415mm , dy= 0.417mm 
+X-intvl=64 Y-intvl=65
+X0=-2705 Y0=784
+R to Target  = 0.415m
+LaserFREQ=500Hz  SetPower=90 (CP) 
+Polymer=-328 (CP
+A/D Data length =1000, Sample Rate = 5000000, Vertical Range (Volt)p-p = 2.000)
+Start=16:17:00 End=16:20:14 2022/05/26
+Photo-Nx=59089 Photo-Ny=44500
+JpgX0=1624JpgY0=799
+Pixcel-X=2592 Pixcel-Y=1944
+AVE=8 CONT=1 Ymirror=+
+ScanPattern=2
+A/D device=5122 store bit=16 LaserName=CP
+A/D Data length =1000, Sample Rate = 5000000, Vertical Range (Volt)p-p = 2.000
