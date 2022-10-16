@@ -43,6 +43,7 @@ class CScanConfig:
     """
     Read scan configuration from cmt-scan.txt file.
     """
+
     def __init__(self, filename):
         self.filename = filename
         self.__dict__ = self.read()
@@ -55,6 +56,9 @@ class CScanConfig:
             # match int or float after 'dx=\s' and 'dy=\s' in the second line
             dx = float(re.search(r'(?<=dx=\s)\d+\.?\d*', lines[1]).group())
             dy = float(re.search(r'(?<=dy=\s)\d+\.?\d*', lines[1]).group())
+            # match int after 'LaserFREQ=' in the 5th line
+            laser_freq = int(
+                re.search(r'(?<=LaserFREQ=)\d+', lines[5]).group())
             # match int after 'A/D Data length\s=' in the 8th line
             data_length = int(
                 re.search(r'(?<=A/D Data length =)\d+', lines[7]).group())
@@ -65,5 +69,6 @@ class CScanConfig:
                     'Ny': Ny,
                     'dx': dx,
                     'dy': dy,
+                    'laser_freq': laser_freq,
                     'data_length': data_length,
                     'sample_rate': sample_rate}

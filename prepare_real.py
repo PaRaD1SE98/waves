@@ -8,6 +8,7 @@ from common.fft import Mask, FFT
 from common.sampling import SamplingProperties
 from common.constructor import construct_data, down_sampling
 from common.utils import CScanConfig
+import config
 
 # Put C_Scan data in this directory
 # including wave.dat and cmt-scan.txt
@@ -20,8 +21,8 @@ sr: int = c_scan.sample_rate     # sampling rate Hz | Sample Rate
 spx: int = c_scan.Nx + 1         # sampling size x  | Nx
 spy: int = c_scan.Ny + 1         # sampling size y  | Ny
 spt: int = c_scan.data_length    # sampling size t  | A/D Data length
-dx: float = c_scan.dx            # mm               | dx
-dy: float = c_scan.dy            # mm               | dy
+dx: float = c_scan.dx            # m                | dx mm?
+dy: float = c_scan.dy            # m                | dy mm?
 
 t_max = spt / sr
 x_max = spx * dx
@@ -32,9 +33,10 @@ props = SamplingProperties((spt, spx, spy), t_max, x_max, y_max)
 data = construct_data(props, raw_data)
 
 # down sampling to make it possible to graph with plotly
-p = [spx, spy, spt]
-p = [i // 3 for i in p]
-data = down_sampling(data, *p)
+# down sampling will result in a less plotting range because.
+if config.GRAPHIC_BACKEND == 'plotly':
+    new_samp_size = [i // 3 for i in [spt, spx, spy]]
+    data = down_sampling(data, *new_samp_size)
 
 # do fft
 fft = FFT(data)
