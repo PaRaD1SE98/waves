@@ -1,3 +1,4 @@
+import re
 import numpy as np
 
 
@@ -36,3 +37,33 @@ class WaveFactory(metaclass=WaveMetaclass):
 
     def wave_func(self):
         raise NotImplementedError()
+
+
+class CScanConfig:
+    """
+    Read scan configuration from cmt-scan.txt file.
+    """
+    def __init__(self, filename):
+        self.filename = filename
+        self.__dict__ = self.read()
+
+    def read(self):
+        with open(self.filename, 'r') as f:
+            lines = f.readlines()
+            Nx = int(re.search(r'(?<=Nx=)\d+', lines[0]).group())
+            Ny = int(re.search(r'(?<=Ny=)\d+', lines[0]).group())
+            # match int or float after 'dx=\s' and 'dy=\s' in the second line
+            dx = float(re.search(r'(?<=dx=\s)\d+\.?\d*', lines[1]).group())
+            dy = float(re.search(r'(?<=dy=\s)\d+\.?\d*', lines[1]).group())
+            # match int after 'A/D Data length\s=' in the 8th line
+            data_length = int(
+                re.search(r'(?<=A/D Data length =)\d+', lines[7]).group())
+            # match int after 'Sample Rate =\s' in the 8th line
+            sample_rate = int(
+                re.search(r'(?<=Sample Rate =\s)\d+', lines[7]).group())
+            return {'Nx': Nx,
+                    'Ny': Ny,
+                    'dx': dx,
+                    'dy': dy,
+                    'data_length': data_length,
+                    'sample_rate': sample_rate}

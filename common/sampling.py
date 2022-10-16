@@ -29,6 +29,8 @@ class SamplingProperties:
         self.sft = self.spt / self.t_max  # sampling temporal frequency (sampling points in 1s) t
         self.sfx = self.spx / self.x_max  # sampling spatial frequency (sampling points in 1m) x
         self.sfy = self.spy / self.y_max  # sampling spatial frequency (sampling points in 1m) y
+        print('SamplingProperties:')
+        print('data length', self.t_max, 's')
         print('sampling temporal frequency (sampling points in 1s) t', self.sft, 'Hz')
         print('sampling spatial frequency (sampling points in 1m) x', self.sfx, '1/m')
         print('sampling spatial frequency (sampling points in 1m) y', self.sfy, '1/m')

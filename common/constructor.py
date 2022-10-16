@@ -36,7 +36,7 @@ def construct_data(smpl_props, z_array):
         x, y = np.meshgrid(X, Y, indexing='ij')
         z = z_array
         sample_props = smpl_props
-
+        print('construct_data:')
         print('constructed signal shape', z.shape)
 
     return Data

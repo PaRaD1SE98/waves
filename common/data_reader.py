@@ -5,6 +5,8 @@ def fread(f_name, spx, spy, spt):
     """
     Read data from file.
 
+    Reads binary data as signed 16-bit integers in big-endian order
+
     :param f_name: filename
     :param spx: sampling size in x direction
     :param spy: sampling size in y direction
@@ -12,8 +14,5 @@ def fread(f_name, spx, spy, spt):
     :return: numpy.array((spx, spy, spt))
     """
     with open(f_name, 'rb') as f:
-        a = np.fromfile(f, dtype=np.int16)
-        z = np.reshape(a, (spy, spt, spx))
-        z = np.swapaxes(z, 0, 2)
-        z = np.swapaxes(z, 1, 2)
-    return z
+        raw_data = np.fromfile(f, dtype='>i2').reshape((spx, spy, spt))
+        return raw_data

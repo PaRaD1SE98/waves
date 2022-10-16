@@ -1,4 +1,4 @@
-from settings import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT
+from config import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT
 
 match GRAPHIC_BACKEND:
     case 'matplotlib':
@@ -8,11 +8,11 @@ match GRAPHIC_BACKEND:
 
 match DATA_SOURCE:
     case 'real':
-        from process_real_data import fft, data, mask, abs_fft_masked, ifft_data
+        from prepare_real import fft, data, mask, abs_fft_masked, ifft_data
     case 'simulation':
-        from process_simulation_data import fft, data, mask, abs_fft_masked, ifft_data
+        from prepare_sim import fft, data, mask, abs_fft_masked, ifft_data
 
-"""plot data in 2 ways"""
+"""plot data with 2 backends"""
 
 
 def o2d():
