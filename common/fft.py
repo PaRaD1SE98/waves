@@ -25,6 +25,9 @@ class FFT:
         self.shifted_abs_fft = np.fft.fftshift(self.abs_fft, axes=(0, 1))
 
 
+MaskRange = Optional[tuple[float, float]]
+
+
 class Mask:
     """
     Construct a filter mask for the FFT results
@@ -32,9 +35,9 @@ class Mask:
 
     def __init__(self,
                  fft,
-                 f_range: Optional[tuple[int | float, int | float]] = None,
-                 kx_range: Optional[tuple[int | float, int | float]] = None,
-                 ky_range: Optional[tuple[int | float, int | float]] = None):
+                 f_range: MaskRange = None,
+                 kx_range: MaskRange = None,
+                 ky_range: MaskRange = None):
         self.fft = fft
         if f_range is None:
             self.f_range = (0, self.fft.smpl_props.sft / 2)
@@ -87,5 +90,5 @@ class Mask:
             to_idx(self.fft.KY, -self.ky_range[0]):to_idx(self.fft.KY, self.ky_range[0]),
             :
         ] = 0
-        # multipy the two mask to get the cross-section
+        # multiply the two mask to get the cross-section
         return mask_f * mask_k
