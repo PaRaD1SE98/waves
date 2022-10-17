@@ -61,8 +61,10 @@ def plot(data, fps=10, title=None, **kwargs):
     plt.show()
 
     if config.MPL_ANI_OUTPUT:
-        if not os.path.exists('../output'):
-            os.mkdir('../output')
+        if not os.path.exists('output'):
+            os.mkdir('output')
+        if not os.path.exists('output/videos'):
+            os.mkdir('output/videos')
         writer = animation.FFMpegWriter(
             codec="h264", fps=round(fps * config.MPL_ANI_OUTPUT_SPEED))
         output_name = f'{"origin" if kwargs.get("origin",False) else "filterd"}' \
