@@ -1,6 +1,6 @@
 """
 1. Set config in config.py
-2. {repare data in prepare_[real/sim].py
+2. prepare data in prepare_[real/sim].py
 3. choose plots to be shown here
 """
 from plot_functions import *
