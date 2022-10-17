@@ -29,7 +29,7 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
     )
     fig.colorbar(image_fft, label='Amplitude')
     fig.subplots_adjust(bottom=0.25)
-    ax_freq = plt.axes([0.20, 0.05, 0.65, 0.06])
+    ax_freq = plt.axes([0.13, 0.05, 0.65, 0.06])
     freq_slider = Slider(
         ax=ax_freq,
         label='Freq',

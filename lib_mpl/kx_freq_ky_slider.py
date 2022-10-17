@@ -30,7 +30,7 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
     plt.ylim(0, fft.smpl_props.sft / 2)  # set valid frequency window
     fig.colorbar(image_fft_ky, label='Amplitude')
     fig.subplots_adjust(bottom=0.25)
-    ax_ky = plt.axes([0.20, 0.05, 0.65, 0.06])
+    ax_ky = plt.axes([0.13, 0.05, 0.65, 0.06])
     ky_slider = Slider(
         ax=ax_ky,
         label='ky',

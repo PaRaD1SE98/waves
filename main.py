@@ -9,4 +9,4 @@
 from plot_functions import *
 
 if __name__ == '__main__':
-    o2d()
+    all_plots()
