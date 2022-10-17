@@ -6,7 +6,7 @@ from common.fft import MaskRange
 # Options:
 #   'plotly': Fast, interactive, has unique volume plot, but not support large datasets
 #   'matplotlib': Supports large datasets, general option.
-GRAPHIC_BACKEND = 'matplotlib'
+GRAPHIC_BACKEND = 'plotly'
 
 # Set to False to disable output.
 # Or a name for the output file common index.
@@ -16,6 +16,13 @@ PLOTLY_OUTPUT = False
 #   'simulation': Use wave generator.
 #   'real': Use real data from data folder.
 DATA_SOURCE = 'real'
+
+# Set fft mask shape
+FFT_MASK: dict[str, MaskRange] = {
+    'f_range': None,
+    'kx_range': None,
+    'ky_range': None,
+}
 
 
 """Simulation"""
@@ -33,10 +40,3 @@ DATA_BASE_DIR = 'data/chen'
 
 # Downsampling ratio for plotly beckend
 DOWN_SAMPLING_RATIO = 3
-
-# Set fft mask shape
-FFT_MASK: dict[str, MaskRange] = {
-    'f_range': None,
-    'kx_range': None,
-    'ky_range': None,
-}

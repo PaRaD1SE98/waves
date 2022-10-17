@@ -2,6 +2,7 @@ from copy import copy
 from typing import Optional
 
 import numpy as np
+import scipy
 
 from common.utils import to_idx
 
@@ -19,10 +20,10 @@ class FFT:
         self.KY = np.linspace(-data.sample_props.sfy / 2,
                               data.sample_props.sfy / 2, data.sample_props.spy)
         self.smpl_props = data.sample_props
-        self.fft_result = np.fft.fftn(data.z)
+        self.fft_result = scipy.fft.fftn(data.z)
         self.abs_fft = np.abs(self.fft_result)
-        self.shifted_fft = np.fft.fftshift(self.fft_result, axes=(0, 1))
-        self.shifted_abs_fft = np.fft.fftshift(self.abs_fft, axes=(0, 1))
+        self.shifted_fft = scipy.fft.fftshift(self.fft_result, axes=(0, 1))
+        self.shifted_abs_fft = scipy.fft.fftshift(self.abs_fft, axes=(0, 1))
 
 
 MaskRange = Optional[tuple[float, float]]

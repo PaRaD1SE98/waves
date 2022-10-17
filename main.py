@@ -9,4 +9,4 @@
 from plot_functions import *
 
 if __name__ == '__main__':
-    filtered_data_plots()
+    mask_plots()
