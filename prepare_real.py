@@ -20,8 +20,8 @@ sr: int = c_scan.sample_rate     # sampling rate Hz | Sample Rate
 spx: int = c_scan.Nx + 1         # sampling size x  | Nx
 spy: int = c_scan.Ny + 1         # sampling size y  | Ny
 spt: int = c_scan.data_length    # sampling size t  | A/D Data length
-dx: float = c_scan.dx            # m                | dx mm?
-dy: float = c_scan.dy            # m                | dy mm?
+dx: float = c_scan.dx / 1000     # m                | dx mm
+dy: float = c_scan.dy / 1000     # m                | dy mm
 
 t_max = spt / sr
 x_max = spx * dx
@@ -45,7 +45,7 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
-mask = Mask(fft,**config.FFT_MASK)()
+mask = Mask(fft, **config.FFT_MASK)()
 
 # do filter
 fft_masked = fft.shifted_fft * mask
