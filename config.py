@@ -1,5 +1,5 @@
 # 'plotly' or 'matplotlib'
-GRAPHIC_BACKEND = 'plotly'
+GRAPHIC_BACKEND = 'matplotlib'
 # set to False to disable output
 # or a name for the output file common index
 PLOTLY_OUTPUT = False

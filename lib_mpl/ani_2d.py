@@ -1,6 +1,8 @@
 import numpy as np
-from matplotlib import pyplot as plt, animation
+from matplotlib import pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+from common.utils import PauseAnimation
 
 
 def plot(data, fps=10, title=None, aspect_ratio=1, **kwargs):
@@ -25,5 +27,5 @@ def plot(data, fps=10, title=None, aspect_ratio=1, **kwargs):
     div = make_axes_locatable(ax)
     cax = div.append_axes('right', '5%', '5%')
     fig.colorbar(image[0], label='Amplitude', cax=cax)
-    ani = animation.FuncAnimation(fig, change_plot_img, len(data.T), fargs=(data.z, image), interval=1000 / fps)
+    ani = PauseAnimation(fig, change_plot_img, len(data.T), fargs=(data.z, image), interval=1000 / fps)
     plt.show()

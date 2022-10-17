@@ -1,4 +1,5 @@
 import re
+from matplotlib.animation import FuncAnimation
 import numpy as np
 
 
@@ -72,3 +73,24 @@ class CScanConfig:
                     'laser_freq': laser_freq,
                     'data_length': data_length,
                     'sample_rate': sample_rate}
+
+
+class PauseAnimation:
+    """
+    Matplotlib animation with pause feature
+    Press 'space' or 'enter' to pause or resume the animation
+    """
+
+    def __init__(self, fig, *args, **kwargs):
+        self.animation = FuncAnimation(fig, *args, **kwargs)
+        self.paused = False
+
+        fig.canvas.mpl_connect('key_press_event', self.toggle_pause)
+
+    def toggle_pause(self, event):
+        if event.key in ('enter', ' '):
+            if self.paused:
+                self.animation.resume()
+            else:
+                self.animation.pause()
+            self.paused = not self.paused
