@@ -6,7 +6,7 @@ from common.fft import MaskRange
 # Options:
 #   'plotly': Fast, interactive, has unique volume plot, but not support large datasets
 #   'matplotlib': Supports large datasets, general option.
-GRAPHIC_BACKEND = 'plotly'
+GRAPHIC_BACKEND = 'matplotlib'
 
 # Set to False to disable output.
 # Or a name for the output file common index.
@@ -19,7 +19,7 @@ DATA_SOURCE = 'real'
 
 # Set fft mask shape
 FFT_MASK: dict[str, MaskRange] = {
-    'f_range': None,
+    'f_range': (230000,250000),
     'kx_range': None,
     'ky_range': None,
 }
