@@ -12,6 +12,12 @@ GRAPHIC_BACKEND = 'matplotlib'
 # Or a name for the output file common index.
 PLOTLY_OUTPUT = False
 
+# Set Matplotlib animation output
+MPL_ANI_OUTPUT = False
+
+# animation output speed (0 ~ 1)
+MPL_ANI_OUTPUT_SPEED = 0.1
+
 # Options:
 #   'simulation': Use wave generator.
 #   'real': Use real data from data folder.

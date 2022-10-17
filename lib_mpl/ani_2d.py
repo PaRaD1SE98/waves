@@ -1,8 +1,9 @@
+import os
 from matplotlib.widgets import Slider
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import animation, pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
+import config
 from common.utils import PauseAnimation, to_idx
 
 
@@ -58,3 +59,15 @@ def plot(data, fps=10, title=None, aspect_ratio=1, **kwargs):
     ani = PauseAnimation(fig, change_plot_img, len(
         data.T), fargs=(data.z, image), interval=1000 / fps)
     plt.show()
+
+    if config.MPL_ANI_OUTPUT:
+        if not os.path.exists('../output'):
+            os.mkdir('../output')
+        writer = animation.FFMpegWriter(
+            codec="h264", fps=round(fps * config.MPL_ANI_OUTPUT_SPEED))
+        output_name = f'{"origin" if kwargs.get("origin",False) else "filterd"}' \
+            f'-{__name__.split(".")[-1]}' \
+            f'-{config.DATA_BASE_DIR.split("/")[1]}' \
+            f'-speed-{config.MPL_ANI_OUTPUT_SPEED}'
+        ani.animation.save(f'output/{output_name}.mp4', writer=writer,
+                           progress_callback=lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))

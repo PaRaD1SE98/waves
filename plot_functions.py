@@ -18,13 +18,13 @@ match DATA_SOURCE:
 def o2d():
     """plot original data in 2d space"""
     lib.ani_2d.plot(data, data.sample_props.spt,
-                    'Visualized_Data_2d', output=PLOTLY_OUTPUT)
+                    'Visualized_Data_2d', output=PLOTLY_OUTPUT, origin=True)
 
 
 def o3d():
     """plot original data in 3d space"""
     lib.ani_3d.plot(data, data.sample_props.spt,
-                    'Visualized_Data_3d', output=PLOTLY_OUTPUT)
+                    'Visualized_Data_3d', output=PLOTLY_OUTPUT, origin=True)
 
 
 """plot origin fft result in 3 directions with slider"""
