@@ -20,8 +20,8 @@ sr: int = c_scan.sample_rate     # sampling rate Hz | Sample Rate
 spx: int = c_scan.Nx + 1         # sampling size x  | Nx
 spy: int = c_scan.Ny + 1         # sampling size y  | Ny
 spt: int = c_scan.data_length    # sampling size t  | A/D Data length
-dx: float = c_scan.dx             # m                | dx mm?
-dy: float = c_scan.dy             # m                | dy mm?
+dx: float = c_scan.dx            # m                | dx mm?
+dy: float = c_scan.dy            # m                | dy mm?
 
 t_max = spt / sr
 x_max = spx * dx
