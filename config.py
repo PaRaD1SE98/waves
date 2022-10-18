@@ -6,7 +6,7 @@ from common.fft import MaskRange
 # Options:
 #   'plotly': Fast, interactive, has unique volume plot, but not support large datasets
 #   'matplotlib': Supports large datasets, general option.
-GRAPHIC_BACKEND = 'plotly'
+GRAPHIC_BACKEND = 'matplotlib'
 
 # Set to False to disable output.
 # Or a name for the output file common index.
@@ -46,7 +46,7 @@ DATA_BASE_DIR = 'data/chen'
 
 # Down sampling
 # matplotlib 3d mask plot might need this
-DOWN_SAMPLING = False
+DOWN_SAMPLING = True
 
 # Downsampling ratio (0 ~ 1)
 DOWN_SAMPLING_RATIO = 0.33

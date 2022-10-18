@@ -16,9 +16,9 @@ match GRAPHIC_BACKEND:
 
 match DATA_SOURCE:
     case 'real':
-        from prepare_real import fft, data, mask, abs_fft_masked, ifft_data
+        from prepare.real import fft, data, mask, abs_fft_masked, ifft_data
     case 'simulation':
-        from prepare_sim import fft, data, mask, abs_fft_masked, ifft_data
+        from prepare.sim import fft, data, mask, abs_fft_masked, ifft_data
 
 """plot data with 2 backends"""
 
