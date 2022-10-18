@@ -34,8 +34,8 @@ FFT_MASK: dict[str, MaskRange] = {
 """Simulation"""
 
 # 'pulse' or 'wave' if DATA_SOURCE == 'simulation'
-# This is two default examples
-# Create new models in models/ folder and process them in prepare_sim.py
+# There is two default examples
+# Create new models in 'models/' folder and process them in prepare_sim.py
 SIMULATION_TYPE = 'pulse'
 
 
