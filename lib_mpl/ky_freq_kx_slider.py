@@ -21,9 +21,9 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
             ax.set_aspect(fft.smpl_props.sft / fft.smpl_props.sfy)
         elif type(aspect_ratio) == float:
             ax.set_aspect(aspect_ratio)
-    ky, freq = np.meshgrid(fft.KY, fft.FREQ, indexing='ij')
+    ky, freq = np.meshgrid(fft.shifted_KY, fft.FREQ, indexing='ij')
     image_fft_kx = ax.pcolormesh(
-        ky, freq, shifted_fft[to_idx(fft.KX, 0), :, :], cmap='viridis',
+        ky, freq, shifted_fft[to_idx(fft.shifted_KX, 0), :, :], cmap='viridis',
         vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
         vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
     )
@@ -42,7 +42,8 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
 
     def update_kx(val):
         ax.pcolormesh(
-            ky, freq, shifted_fft[to_idx(fft.KY, val), :, :], cmap='viridis',
+            ky, freq, shifted_fft[to_idx(
+                fft.shifted_KY, val), :, :], cmap='viridis',
             vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,
             vmax=shifted_fft[p_max[0], p_max[1], p_max[2]] if c_scale_lim else None
         )

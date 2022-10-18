@@ -18,7 +18,8 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, out
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
 
-    kx, ky, freq = np.meshgrid(fft.KX, fft.KY, fft.FREQ, indexing='ij')
+    kx, ky, freq = np.meshgrid(
+        fft.shifted_KX, fft.shifted_KY, fft.FREQ, indexing='ij')
     data_fft = {'kx': kx.flatten(),
                 'ky': ky.flatten(),
                 'freq': freq.flatten(),

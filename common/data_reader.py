@@ -14,5 +14,8 @@ def fread(f_name, spx, spy, spt):
     :return: numpy.array((spx, spy, spt))
     """
     with open(f_name, 'rb') as f:
+        # big-endian: '>', signed: 'i', 16bit: '2'
         raw_data = np.fromfile(f, dtype='>i2').reshape((spx, spy, spt))
+        # convert to regular array with best compatibility
+        raw_data = np.array(raw_data, dtype=np.float32)
         return raw_data

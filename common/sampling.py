@@ -5,9 +5,9 @@ class SamplingProperties:
 
     def __init__(self,
                  sp,
-                 t_max=None,
-                 x_max=None,
-                 y_max=None):
+                 t_max,
+                 x_max,
+                 y_max):
         """
         set sampling parameters
 

@@ -60,7 +60,7 @@ def plot(data, fps=10, title=None, **kwargs):
         data.T), fargs=(data.z, surface), interval=1000 / fps)
     plt.show()
 
-    if config.MPL_ANI_OUTPUT:
+    if config.MPL_ANI_OUTPUT and config.DATA_SOURCE == 'real':
         if not os.path.exists('output'):
             os.mkdir('output')
         if not os.path.exists('output/videos'):
@@ -69,7 +69,7 @@ def plot(data, fps=10, title=None, **kwargs):
             codec="h264", fps=round(fps * config.MPL_ANI_OUTPUT_SPEED))
         output_name = f'{"origin" if kwargs.get("origin",False) else "filterd"}' \
             f'-{__name__.split(".")[-1]}' \
-            f'-{config.DATA_BASE_DIR.split("/")[1]}' \
+            f'-{config.DATA_BASE_DIR.split("/")[1] if config.DATA_SOURCE == "real" else "simulation"}' \
             f'-speed-{config.MPL_ANI_OUTPUT_SPEED}'
         ani.animation.save(f'output/{output_name}.mp4', writer=writer,
                            progress_callback=lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))

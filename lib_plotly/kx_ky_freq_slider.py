@@ -12,7 +12,8 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, out
     p_min = np.unravel_index(np.argmin(shifted_fft), shifted_fft.shape)
     p_max = np.unravel_index(np.argmax(shifted_fft), shifted_fft.shape)
     FREQ = np.linspace(0, fft.smpl_props.sft / 2, int(fft.smpl_props.spt / 2))
-    kx, ky, freq = np.meshgrid(fft.KX, fft.KY, FREQ, indexing='ij')
+    kx, ky, freq = np.meshgrid(
+        fft.shifted_KX, fft.shifted_KY, FREQ, indexing='ij')
     data = {'kx': kx.flatten(),
             'ky': ky.flatten(),
             'amplitude': shifted_fft[:, :, 0:int(fft.smpl_props.spt / 2)].flatten(),

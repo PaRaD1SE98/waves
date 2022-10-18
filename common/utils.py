@@ -10,11 +10,11 @@ def to_idx(array, value):
 class WaveMetaclass(type):
     def __nyquist_check__(cls, smpl_props):
         assert smpl_props.sft > 2 * max(
-            cls.frequency), f'Nyquist: Make sure sampling frequency(current:{smpl_props.sft}) > 2 * highest frequency of the signal(current:{2 * max(cls.frequency)})'
+            cls.frequency), f'Nyquist: Make sure sampling temperal frequency(current:{smpl_props.sft}) > 2 * highest frequency of the signal(current:{2 * max(cls.frequency)})'
         assert smpl_props.sfx > 2 * max(
-            cls.wave_number_x), f'Nyquist: Make sure sampling frequency(current:{smpl_props.sfx}) > 2 * highest frequency of the signal(current:{2 * max(cls.frequency)})'
+            cls.wave_number_x), f'Nyquist: Make sure sampling spacial frequency x (current:{smpl_props.sfx}) > 2 * highest frequency of the signal(current:{2 * max(cls.wave_number_x)})'
         assert smpl_props.sfy > 2 * max(
-            cls.wave_number_y), f'Nyquist: Make sure sampling frequency(current:{smpl_props.sfy}) > 2 * highest frequency of the signal(current:{2 * max(cls.frequency)})'
+            cls.wave_number_y), f'Nyquist: Make sure sampling spacial frequency y(current:{smpl_props.sfy}) > 2 * highest frequency of the signal(current:{2 * max(cls.wave_number_y)})'
 
     def __call__(cls, smpl_props, *args, **kwargs):
         cls.__nyquist_check__(smpl_props)

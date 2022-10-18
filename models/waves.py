@@ -8,9 +8,9 @@ class Wave(WaveFactory):
     Periodic waves superposed on each other.
     """
     center = .5, .5  # x, y
-    frequency = 15, 20, 25, 30  # Hz
-    wave_number_x = 14, 23, 25, 31  # 1/m
-    wave_number_y = 14, 23, 25, 31  # 1/m
+    frequency = 5, 10, 15, 20  # Hz
+    wave_number_x = 2, 3, 4, 5  # 1/m
+    wave_number_y = 1, 3, 5, 7  # 1/m
 
     def wave_func(self):
         w = np.sin(

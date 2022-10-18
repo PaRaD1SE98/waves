@@ -21,7 +21,7 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
             ax.set_aspect(fft.smpl_props.sfy / fft.smpl_props.sfx)
         elif type(aspect_ratio) == float:
             ax.set_aspect(aspect_ratio)
-    kx, ky = np.meshgrid(fft.KX, fft.KY, indexing='ij')
+    kx, ky = np.meshgrid(fft.shifted_KX, fft.shifted_KY, indexing='ij')
     image_fft = ax.pcolormesh(
         kx, ky, shifted_fft[:, :, 0], cmap='viridis',
         vmin=shifted_fft[p_min[0], p_min[1], p_min[2]] if c_scale_lim else None,

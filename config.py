@@ -13,7 +13,7 @@ GRAPHIC_BACKEND = 'plotly'
 PLOTLY_OUTPUT = False
 
 # Set Matplotlib animation output
-MPL_ANI_OUTPUT = True
+MPL_ANI_OUTPUT = False
 
 # animation output speed (0 ~ 1)
 MPL_ANI_OUTPUT_SPEED = 0.1
@@ -25,9 +25,9 @@ DATA_SOURCE = 'real'
 
 # Set fft mask shape
 FFT_MASK: dict[str, MaskRange] = {
-    'f_range': (230000,250000),
-    'kx_range': None,
-    'ky_range': None,
+    'f_range': (110000, 120000),
+    'kx_range': (-150, 200),
+    'ky_range': (0, 200),
 }
 
 
@@ -44,5 +44,9 @@ SIMULATION_TYPE = 'pulse'
 # Path to data folder
 DATA_BASE_DIR = 'data/chen'
 
-# Downsampling ratio for plotly beckend
-DOWN_SAMPLING_RATIO = 3
+# Down sampling
+# matplotlib 3d mask plot might need this
+DOWN_SAMPLING = False
+
+# Downsampling ratio (0 ~ 1)
+DOWN_SAMPLING_RATIO = 0.33

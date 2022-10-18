@@ -4,7 +4,7 @@ prepare data for plotting
 import numpy as np
 
 from common.data_reader import fread
-from common.fft import Mask, FFT
+from common.fft import Mask, FFT, CubeWhiteList
 from common.sampling import SamplingProperties
 from common.constructor import construct_data, down_sampling
 from common.utils import CScanConfig
@@ -33,9 +33,9 @@ data = construct_data(props, raw_data)
 
 # down sampling to make it possible to graph with plotly
 # down sampling will result in a less plotting range because.
-if config.GRAPHIC_BACKEND == 'plotly':
+if config.DOWN_SAMPLING:
     new_samp_size = [
-        i // config.DOWN_SAMPLING_RATIO for i in [spt, spx, spy]]
+        round(i * config.DOWN_SAMPLING_RATIO) for i in [spt, spx, spy]]
     data = down_sampling(data, *new_samp_size)
 
 # do fft
@@ -45,7 +45,7 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
-mask = Mask(fft, **config.FFT_MASK)()
+mask = CubeWhiteList(fft, **config.FFT_MASK)()
 
 # do filter
 fft_masked = fft.shifted_fft * mask

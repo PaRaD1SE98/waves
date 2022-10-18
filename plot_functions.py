@@ -1,4 +1,12 @@
-from config import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT
+from config import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT, DOWN_SAMPLING
+
+# pre-check
+if GRAPHIC_BACKEND == 'plotly' and not DOWN_SAMPLING:
+    print('Warning: Plotly backend might not support large datasets. '
+          'Set config.DOWN_SAMPLING to True to down sample data.')
+    ans = input('Keep going? (Y/n)')
+    if ans.capitalize() != 'Y':
+        exit()
 
 match GRAPHIC_BACKEND:
     case 'matplotlib':
@@ -63,6 +71,8 @@ def m3d():
     if data.sample_props.spt * data.sample_props.spx * data.sample_props.spy <= 128 ** 3:
         lib.mask_3d.plot(fft, mask, 'FFT_Mask_3d',
                          surface_count=10, output=PLOTLY_OUTPUT)
+    else:
+        print('m3d: Dataset too large to plot with matplotlib voxels plot, skipping...')
 
 
 """plot filtered fft result in 3 directions with slider"""
