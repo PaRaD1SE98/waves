@@ -22,4 +22,4 @@
 from plot_functions import *
 
 if __name__ == '__main__':
-    od2d()
+    volume_plot()

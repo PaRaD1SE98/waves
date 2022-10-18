@@ -3,7 +3,8 @@ import plotly.graph_objects as go
 
 
 def plot(fft, data, title=None, surface_count=10, output=None):
-    kx, ky, freq = np.meshgrid(fft.shifted_KX, fft.shifted_KY, fft.FREQ)
+    kx, ky, freq = np.meshgrid(
+        fft.shifted_KX, fft.shifted_KY, fft.FREQ, indexing='ij')
     fig = go.Figure(data=[
         go.Volume(
             x=kx.flatten(),

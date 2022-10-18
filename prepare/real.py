@@ -1,7 +1,9 @@
 """
 prepare data for plotting
 """
+import os
 import numpy as np
+import scipy
 
 from common.data_reader import fread
 from common.fft import Mask, FFT, CubeWhiteList
@@ -14,7 +16,8 @@ import config
 # including wave.dat and cmt-scan.txt
 
 # construct data
-c_scan = CScanConfig(f'{config.DATA_BASE_DIR}/cmt-scan.txt')
+c_scan_path = os.path.join(config.DATA_BASE_DIR, 'cmt-scan.txt')
+c_scan = CScanConfig(c_scan_path)
 # set sampling properties from cmt-scan.txt
 sr: int = c_scan.sample_rate     # sampling rate Hz | Sample Rate
 spx: int = c_scan.Nx + 1         # sampling size x  | Nx
@@ -26,7 +29,9 @@ dy: float = c_scan.dy / 1000     # m                | dy mm
 t_max = spt / sr
 x_max = spx * dx
 y_max = spy * dy
-raw_data = fread(f'{config.DATA_BASE_DIR}/wave.dat', spx, spy, spt)
+
+data_path = os.path.join(config.DATA_BASE_DIR, 'wave.dat')
+raw_data = fread(data_path, spx, spy, spt)
 
 props = SamplingProperties((spt, spx, spy), t_max, x_max, y_max)
 data = construct_data(props, raw_data)
@@ -44,7 +49,7 @@ fft = FFT(data)
 # create filter
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
-# currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
+# currently can only do cube filter
 mask = CubeWhiteList(fft, **config.FFT_MASK)()
 
 # do filter
@@ -52,5 +57,5 @@ fft_masked = fft.shifted_fft * mask
 abs_fft_masked = np.abs(fft_masked)
 
 # do ifft on the filtered result
-ifft = np.fft.ifftn(np.fft.ifftshift(fft_masked)).real
+ifft = scipy.fft.ifftn(scipy.fft.ifftshift(fft_masked)).real
 ifft_data = construct_data(data.sample_props, ifft)
