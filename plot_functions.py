@@ -23,13 +23,13 @@ match DATA_SOURCE:
 """plot data with 2 backends"""
 
 
-def o2d():
+def od2d():
     """plot original data in 2d space"""
     lib.ani_2d.plot(data, data.sample_props.spt,
                     'Visualized_Data_2d', output=PLOTLY_OUTPUT, origin=True)
 
 
-def o3d():
+def od3d():
     """plot original data in 3d space"""
     lib.ani_3d.plot(data, data.sample_props.spt,
                     'Visualized_Data_3d', output=PLOTLY_OUTPUT, origin=True)
@@ -38,19 +38,19 @@ def o3d():
 """plot origin fft result in 3 directions with slider"""
 
 
-def oxyf():
+def ofxyf():
     """plot origin fft result ky/kx in 3 directions with frequency slider"""
     lib.kx_ky_freq_slider.plot(
         fft, fft.shifted_abs_fft, 'FFT_Result(ky_kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
 
 
-def oxfy():
+def ofxfy():
     """plot origin fft result freq/kx in 3 directions with ky slider"""
     lib.kx_freq_ky_slider.plot(
         fft, fft.shifted_abs_fft, 'FFT_Result(freq_kx)', output=PLOTLY_OUTPUT)
 
 
-def oyfx():
+def ofyfx():
     """plot origin fft result freq/ky in 3 directions with frequency kx slider"""
     lib.ky_freq_kx_slider.plot(
         fft, fft.shifted_abs_fft, 'FFT_Result(freq_ky)', output=PLOTLY_OUTPUT)
@@ -80,19 +80,19 @@ def m3d():
 """plot filtered fft result in 3 directions with slider"""
 
 
-def fxyf():
+def ffxyf():
     """plot filtered fft result ky/kx in 3 directions with frequency slider"""
     lib.kx_ky_freq_slider.plot(
         fft, abs_fft_masked, 'FFT_Masked(ky_kx)', c_scale_lim=True, output=PLOTLY_OUTPUT)
 
 
-def fxfy():
+def ffxfy():
     """plot filtered fft result freq/kx in 3 directions with ky slider"""
     lib.kx_freq_ky_slider.plot(
         fft, abs_fft_masked, 'FFT_Masked(freq_kx)', output=PLOTLY_OUTPUT)
 
 
-def fyfx():
+def ffyfx():
     """plot filtered fft result freq/ky in 3 directions with kx slider"""
     lib.ky_freq_kx_slider.plot(
         fft, abs_fft_masked, 'FFT_Masked(freq_ky)', output=PLOTLY_OUTPUT)
@@ -113,29 +113,29 @@ def ff3d():
 """plot filtered signal in 2 ways"""
 
 
-def f2d():
+def fd2d():
     """plot filtered data in 2d space"""
     lib.ani_2d.plot(ifft_data, ifft_data.sample_props.spt,
                     'Filtered_Data_2d', output=PLOTLY_OUTPUT)
 
 
-def f3d():
+def fd3d():
     """plot filtered data in 3d space"""
     lib.ani_3d.plot(ifft_data, ifft_data.sample_props.spt,
                     'Filtered_Data_3d', output=PLOTLY_OUTPUT)
 
 
-o = [o2d, o3d]
-of = [oxyf, oxfy, oyfx, of3d]
+o = [od2d, od3d]
+of = [ofxyf, ofxfy, ofyfx, of3d]
 m = [m3d]
-ff = [fxyf, fxfy, fyfx, ff3d]
-f = [f2d, f3d]
+ff = [ffxyf, ffxfy, ffyfx, ff3d]
+f = [fd2d, fd3d]
 all = o + of + m + ff + f
-d2 = [o2d, oxyf, oxfy, oyfx, fxyf, fxfy, fyfx, f2d]
-d2_of = [o2d, f2d]
-d2_of_f = [oxyf, oxfy, oyfx, fxyf, fxfy, fyfx]
-d3 = [o3d, of3d, m3d, ff3d, f3d]
-surface = [o3d, f3d]
+d2 = [od2d, ofxyf, ofxfy, ofyfx, ffxyf, ffxfy, ffyfx, fd2d]
+d2_of = [od2d, fd2d]
+d2_of_f = [ofxyf, ofxfy, ofyfx, ffxyf, ffxfy, ffyfx]
+d3 = [od3d, of3d, m3d, ff3d, fd3d]
+surface = [od3d, fd3d]
 volume = [of3d, m3d, ff3d]
 
 

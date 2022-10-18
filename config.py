@@ -25,9 +25,9 @@ DATA_SOURCE = 'real'
 
 # Set fft mask shape
 FFT_MASK: dict[str, MaskRange] = {
-    'f_range': (110000, 120000),
-    'kx_range': (-150, 200),
-    'ky_range': (0, 200),
+    'f_range': (230000, 250000),
+    'kx_range': (-50, 150),
+    'ky_range': None,
 }
 
 
@@ -46,7 +46,7 @@ DATA_BASE_DIR = 'data/chen'
 
 # Down sampling
 # matplotlib 3d mask plot might need this
-DOWN_SAMPLING = True
+DOWN_SAMPLING = False
 
 # Downsampling ratio (0 ~ 1)
 DOWN_SAMPLING_RATIO = 0.33
