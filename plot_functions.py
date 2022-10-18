@@ -61,6 +61,8 @@ def of3d():
     if GRAPHIC_BACKEND == 'plotly':
         lib.fft_3d.plot(fft, fft.shifted_abs_fft, 'FFT_Result_3d',
                         surface_count=10, output=PLOTLY_OUTPUT)
+    else:
+        print('of3d: plotly only, skipping...')
 
 
 """plot fft mask shape in 3d space"""
@@ -104,6 +106,8 @@ def ff3d():
     if GRAPHIC_BACKEND == 'plotly':
         lib.fft_3d.plot(fft, abs_fft_masked, 'FFT_Filtered_3d',
                         surface_count=10, output=PLOTLY_OUTPUT)
+    else:
+        print('ff3d: plotly only, skipping...')
 
 
 """plot filtered signal in 2 ways"""
