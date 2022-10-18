@@ -10,9 +10,9 @@ if GRAPHIC_BACKEND == 'plotly' and not DOWN_SAMPLING:
 
 match GRAPHIC_BACKEND:
     case 'matplotlib':
-        import lib_mpl as lib
+        import lib.mpl as lib
     case 'plotly':
-        import lib_plotly as lib
+        import lib.plotly as lib
 
 match DATA_SOURCE:
     case 'real':
