@@ -3,7 +3,7 @@ import plotly
 from plotly import express as px
 
 
-def plot(data, fps=10, title=None, aspect_ratio=1, output=None):
+def plot(data, fps=10, title=None, aspect_ratio=1, output=None, **kwargs):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
     x, y, t = np.meshgrid(data.X, data.Y, data.T, indexing='ij')

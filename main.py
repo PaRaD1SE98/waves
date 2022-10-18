@@ -9,4 +9,4 @@
 from plot_functions import *
 
 if __name__ == '__main__':
-    all_plots()
+    d3_plots()

@@ -6,14 +6,14 @@ from common.fft import MaskRange
 # Options:
 #   'plotly': Fast, interactive, has unique volume plot, but not support large datasets
 #   'matplotlib': Supports large datasets, general option.
-GRAPHIC_BACKEND = 'matplotlib'
+GRAPHIC_BACKEND = 'plotly'
 
 # Set to False to disable output.
 # Or a name for the output file common index.
 PLOTLY_OUTPUT = False
 
 # Set Matplotlib animation output
-MPL_ANI_OUTPUT = False
+MPL_ANI_OUTPUT = True
 
 # animation output speed (0 ~ 1)
 MPL_ANI_OUTPUT_SPEED = 0.1

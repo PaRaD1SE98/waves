@@ -27,6 +27,9 @@ def plot(fft, data, title=None, surface_count=10, output=None):
             yanchor='top'),
         scene=dict(
             zaxis=dict(range=[0, fft.smpl_props.sft / 2]),
+            xaxis_title='kx[1/m]',
+            yaxis_title='ky[1/m]',
+            zaxis_title='frequency[Hz]',
         ),
         scene_aspectmode='manual',
         scene_aspectratio=dict(x=1, y=1, z=1),

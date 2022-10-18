@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import numpy as np
 
 
-def plot(data, fps=10, title=None, output=None):
+def plot(data, fps=10, title=None, output=None, **kwargs):
     p_min = np.unravel_index(np.argmin(data.z), data.z.shape)
     p_max = np.unravel_index(np.argmax(data.z), data.z.shape)
 
