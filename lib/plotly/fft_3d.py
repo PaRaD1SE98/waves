@@ -5,7 +5,12 @@ import plotly.graph_objects as go
 def plot(fft, data, title=None, surface_count=10, output=None):
     p_min = np.unravel_index(np.argmin(data), data.shape)
     p_max = np.unravel_index(np.argmax(data), data.shape)
-    kx, ky, freq = np.meshgrid(fft.shifted_KX, fft.shifted_KY, fft.FREQ, indexing='ij')
+    o_min = np.unravel_index(
+        np.argmin(fft.shifted_abs_fft), fft.shifted_abs_fft.shape)
+    o_max = np.unravel_index(
+        np.argmax(fft.shifted_abs_fft), fft.shifted_abs_fft.shape)
+    kx, ky, freq = np.meshgrid(
+        fft.shifted_KX, fft.shifted_KY, fft.FREQ, indexing='ij')
     fig = go.Figure(data=[
         go.Volume(
             x=kx.flatten(),
@@ -16,6 +21,8 @@ def plot(fft, data, title=None, surface_count=10, output=None):
             isomax=data[p_max[0], p_max[1], p_max[2]],
             opacity=0.2,
             colorscale='Viridis',
+            cmax=fft.shifted_abs_fft[o_max[0], o_max[1], o_max[2]],
+            cmin=fft.shifted_abs_fft[o_min[0], o_min[1], o_min[2]],
             surface_count=surface_count,
         )])
     fig.update_layout(

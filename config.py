@@ -26,8 +26,8 @@ DATA_SOURCE = 'real'
 # Set fft mask shape
 FFT_MASK: dict[str, MaskRange] = {
     'f_range': (230000, 250000),
-    'kx_range': (-50, 150),
-    'ky_range': (-50, 150),
+    'kx_range': (-150, 150),
+    'ky_range': (-230, -150),
 }
 
 
