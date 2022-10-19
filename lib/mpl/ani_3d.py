@@ -71,5 +71,5 @@ def plot(data, fps=10, title=None, **kwargs):
             f'-{__name__.split(".")[-1]}' \
             f'-{config.DATA_BASE_DIR.split("/")[1] if config.DATA_SOURCE == "real" else "simulation"}' \
             f'-speed-{config.MPL_ANI_OUTPUT_SPEED}'
-        ani.animation.save(f'output/{output_name}.mp4', writer=writer,
+        ani.animation.save(f'output/videos/{output_name}.mp4', writer=writer,
                            progress_callback=lambda i, n: print(f'Saving frame {i} of {n}', end='\r'))
