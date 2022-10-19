@@ -6,7 +6,7 @@ import numpy as np
 import scipy
 
 from common.data_reader import fread
-from common.fft import Mask, FFT, CubeWhiteList
+from common.fft import CubeBlackList, BaseBlackList, FFT, CubeWhiteList
 from common.sampling import SamplingProperties
 from common.constructor import construct_data, down_sampling
 from common.utils import CScanConfig
@@ -50,7 +50,8 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do cube filter
-mask = CubeWhiteList(fft, **config.FFT_MASK)()
+mask = CubeWhiteList(fft, **config.FILTER_WHITELIST)()
+mask = np.logical_and(mask, CubeBlackList(fft, **config.FILTER_BLACKLIST)())
 
 # do filter
 fft_masked = fft.shifted_fft * mask

@@ -76,6 +76,13 @@ def m3d():
     else:
         print('m3d: Dataset too large to plot with matplotlib voxels plot, skipping...')
 
+def mf3d():
+    """plot fft mask shape with fft data in 3d space"""
+    if GRAPHIC_BACKEND == 'plotly':
+        lib.mask_fft_3d.plot(fft, mask, 'Mask_with_FFT_3d',
+                            surface_count=10, output=PLOTLY_OUTPUT)
+    else:
+        print('mf3d: plotly only, skipping...')
 
 """plot filtered fft result in 3 directions with slider"""
 

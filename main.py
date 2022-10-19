@@ -7,19 +7,25 @@
 3. Choose plots to be shown here
     Word Shortcuts:
         prefix:
-            od: original data
-            fd: filtered data
             of: original fft
             ff: filtered fft
-            m: mask
         followed by:
-            2d: 2d plot
             3d: 3d plot
             xyf: kx-ky/freq slider
             xfy: kx-freq/ky slider
             yfx: ky-freq/kx slider
+        prefix:
+            m: mask
+            mf: mask with FFT data
+        followed by:
+            3d: 3d plot
+        prefix:
+            od: original data
+            fd: filtered data
+        followed by:
+            2d: 2d plot
 """
 from plot_functions import *
 
 if __name__ == '__main__':
-    volume_plot()
+    fd2d()

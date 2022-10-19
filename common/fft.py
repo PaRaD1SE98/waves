@@ -20,9 +20,12 @@ class FFT:
         self.KY = np.linspace(0, data.sample_props.sfy,
                               data.sample_props.spy)
         # bug: cannot use fftshift on class instance variable
-        self.shifted_FREQ = scipy.fft.fftshift(scipy.fft.fftfreq(data.sample_props.spt, data.sample_props.dt))
-        self.shifted_KX = scipy.fft.fftshift(scipy.fft.fftfreq(data.sample_props.spx, data.sample_props.dx))
-        self.shifted_KY = scipy.fft.fftshift(scipy.fft.fftfreq(data.sample_props.spy, data.sample_props.dy))
+        self.shifted_FREQ = scipy.fft.fftshift(
+            scipy.fft.fftfreq(data.sample_props.spt, data.sample_props.dt))
+        self.shifted_KX = scipy.fft.fftshift(scipy.fft.fftfreq(
+            data.sample_props.spx, data.sample_props.dx))
+        self.shifted_KY = scipy.fft.fftshift(scipy.fft.fftfreq(
+            data.sample_props.spy, data.sample_props.dy))
         self.smpl_props = data.sample_props
         self.fft_result = scipy.fft.fftn(data.z)
         self.abs_fft = np.abs(self.fft_result)
@@ -33,9 +36,9 @@ class FFT:
 MaskRange = Optional[tuple[float, float]]
 
 
-class Mask:
+class BaseBlackList:
     """
-    Construct a filter mask for the FFT results
+    Base class for blacklist filters
     """
 
     def __init__(self,
@@ -70,35 +73,13 @@ class Mask:
             self.ky_range = ky_range
 
     def __call__(self):
-        # data points inside the frequency range set to 1
-        mask_f = np.zeros(self.fft.shifted_abs_fft.shape)
-        mask_k = copy(mask_f)
-        mask_f[
-            :,
-            :,
-            to_idx(self.fft.FREQ, self.f_range[0]):to_idx(self.fft.FREQ, self.f_range[1])
-        ] = 1
+        raise NotImplementedError
 
-        # for kx and ky, filter mirror part together
-        # higher limit
-        # lower than higher limit set to 1
-        mask_k[
-            to_idx(self.fft.shifted_KX, -self.kx_range[1]):to_idx(self.fft.shifted_KX, self.kx_range[1]),
-            to_idx(self.fft.shifted_KY, -self.ky_range[1]):to_idx(self.fft.shifted_KY, self.ky_range[1]),
-            :
-        ] = 1
-        # lower limit
-        # lower than lower limit set to 0
-        mask_k[
-            to_idx(self.fft.shifted_KX, -self.kx_range[0]):to_idx(self.fft.shifted_KX, self.kx_range[0]),
-            to_idx(self.fft.shifted_KY, -self.ky_range[0]):to_idx(self.fft.shifted_KY, self.ky_range[0]),
-            :
-        ] = 0
-        # multiply the two mask to get the cross-section
-        return mask_f * mask_k
+class BaseWhiteList:
+    """
+    Base class for whitelist filters
+    """
 
-
-class CubeWhiteList:
     def __init__(self,
                  fft,
                  f_range: MaskRange = None,
@@ -128,6 +109,8 @@ class CubeWhiteList:
                 2, f'{ky_range[1]},{self.fft.smpl_props.sfy / 2}'
             self.ky_range = ky_range
 
+
+class CubeWhiteList(BaseWhiteList):
     def __call__(self):
         # data points inside the frequency range set to 1
         mask_f = np.zeros(self.fft.shifted_abs_fft.shape)
@@ -158,3 +141,15 @@ class CubeWhiteList:
         else:
             mask_ky[:, :, :] = 1
         return np.logical_and(mask_f, np.logical_and(mask_kx, mask_ky))
+
+
+class CubeBlackList(BaseBlackList):
+    def __call__(self):
+        # data points inside the frequency range set to 1
+        mask = np.ones(self.fft.shifted_abs_fft.shape)
+        mask[
+            to_idx(self.fft.shifted_KX, self.kx_range[0]):to_idx(self.fft.shifted_KX, self.kx_range[1]),
+            to_idx(self.fft.shifted_KY, self.ky_range[0]):to_idx(self.fft.shifted_KY, self.ky_range[1]),
+            to_idx(self.fft.FREQ, self.f_range[0]):to_idx(self.fft.FREQ, self.f_range[1])
+        ] = 0
+        return mask

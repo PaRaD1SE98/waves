@@ -1,7 +1,7 @@
 import numpy as np
 
 from common.constructor import construct_data, generate_data
-from common.fft import Mask, FFT
+from common.fft import FFT, CubeBlackList, CubeWhiteList
 from common.sampling import SamplingProperties
 from models.pulses import Pulse
 from models.waves import Wave
@@ -26,7 +26,7 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do rectangular filter, which has a high risk creating some glitches in the frequency domain
-mask = Mask(fft, (17, 25), (10, 30), (10, 30))()
+mask = CubeWhiteList(fft, (17, 25), (10, 30), (10, 30))()
 
 # do filter
 fft_masked = fft.shifted_fft * mask
