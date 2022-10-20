@@ -54,4 +54,4 @@ DATA_BASE_DIR = 'data/chen'
 DOWN_SAMPLING = False
 
 # Downsampling ratio (0 ~ 1)
-DOWN_SAMPLING_RATIO = 0.33
+DOWN_SAMPLING_RATIO = 0.45

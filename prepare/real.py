@@ -50,8 +50,9 @@ fft = FFT(data)
 # choose the needed range of f, kx, ky in the format (lower limit, higher limit)
 # todo: improve mask flexibility.
 # currently can only do cube filter
-mask = CubeWhiteList(fft, **config.FILTER_WHITELIST)()
-mask = np.logical_and(mask, CubeBlackList(fft, **config.FILTER_BLACKLIST)())
+white_list = CubeWhiteList(fft, **config.FILTER_WHITELIST)
+black_list = CubeBlackList(fft, **config.FILTER_BLACKLIST)
+mask = np.logical_and(white_list(), black_list())
 
 # do filter
 fft_masked = fft.shifted_fft * mask

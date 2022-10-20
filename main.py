@@ -1,5 +1,5 @@
 """
-1. Put data in a folder in the same directory as this file if doing real data analysis.
+1. Put data folder inside data/ directory if doing real data analysis.
     The data folder should contain the following files:
         wave.dat
         cmt-scan.txt
