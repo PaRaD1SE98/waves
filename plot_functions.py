@@ -4,8 +4,8 @@ from config import GRAPHIC_BACKEND, DATA_SOURCE, PLOTLY_OUTPUT, DOWN_SAMPLING
 if GRAPHIC_BACKEND == 'plotly' and not DOWN_SAMPLING:
     print('Warning: Plotly backend might not support large datasets. '
           'Set config.DOWN_SAMPLING to True to down sample data.')
-    ans = input('Keep going? (Y/n)')
-    if ans.capitalize() != 'Y':
+    ans = input('Keep going? (y/N)')
+    if ans.lower() != 'y':
         exit()
 
 match GRAPHIC_BACKEND:

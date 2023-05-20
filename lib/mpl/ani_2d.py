@@ -32,8 +32,8 @@ def plot(data, fps=10, title=None, aspect_ratio=1, **kwargs):
     ax = fig.add_subplot()
     ax.set_title(title)
     ax.set_aspect(aspect_ratio)
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
     # slider
     fig.subplots_adjust(bottom=0.2)
     ax_slider = fig.add_axes([0.2, 0.025, 0.6, 0.05])

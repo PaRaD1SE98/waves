@@ -1,3 +1,7 @@
+import matplotlib as mpl
+
+mpl.use('QtAgg')
+
 from . import ani_3d
 from . import ani_2d
 from . import kx_ky_freq_slider
