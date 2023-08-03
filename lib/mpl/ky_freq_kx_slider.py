@@ -12,8 +12,8 @@ def plot(fft, shifted_fft, title=None, c_scale_lim=False, aspect_ratio=None, **k
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.set_title(title)
-    ax.set_xlabel('Ky')
-    ax.set_ylabel('Freq')
+    ax.set_xlabel('Ky(1/m)')
+    ax.set_ylabel('Freq(Hz)')
     if aspect_ratio is not None:
         if aspect_ratio == 'as_sample':
             ax.set_aspect(fft.smpl_props.spt / fft.smpl_props.spy)

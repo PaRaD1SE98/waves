@@ -1,0 +1,8 @@
+Title:
+Inspector:
+Inspection Sample:
+Laser Power:
+CH1 Sensor:
+  Amp., Freq. Filter:
+CH2 Sensor:
+  Amp., Freq. Filter:

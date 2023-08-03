@@ -1,0 +1,14 @@
+Nx=409 , Ny=23 , N=9840
+dx= 0.394mm , dy= 2.246mm 
+X-intvl=58 Y-intvl=326
+X0=-10494 Y0=-2990
+R to Target  = 0.405m
+LaserFREQ=500Hz  
+Start=20:57:58 End=21:00:35 2023/06/27
+Photo-Nx=59089 Photo-Ny=44500
+JpgX0=1290JpgY0=1082
+Pixcel-X=2592 Pixcel-Y=1944
+AVE=8 CONT=1 Ymirror=+
+ScanPattern=2
+A/D device=5122 store bit=16 LaserName=ULTRA
+A/D Data length =1500, Sample Rate = 10000000, Vertical Range (Volt)p-p = 1.000

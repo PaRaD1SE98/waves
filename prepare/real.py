@@ -51,9 +51,9 @@ fft = FFT(data)
 # todo: improve mask flexibility.
 # currently can only do cube filter
 white_list = CubeWhiteList(fft, **config.FILTER_WHITELIST)
-black_list = CubeBlackList(fft, **config.FILTER_BLACKLIST)
-mask = np.logical_and(white_list(), black_list())
-
+# black_list = CubeBlackList(fft, **config.FILTER_BLACKLIST)
+# mask = np.logical_and(white_list(), black_list())
+mask = white_list()
 # do filter
 fft_masked = fft.shifted_fft * mask
 abs_fft_masked = np.abs(fft_masked)

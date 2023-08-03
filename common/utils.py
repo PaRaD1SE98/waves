@@ -60,12 +60,20 @@ class CScanConfig:
             # match int after 'LaserFREQ=' in the 5th line
             laser_freq = int(
                 re.search(r'(?<=LaserFREQ=)\d+', lines[5]).group())
-            # match int after 'A/D Data length\s=' in the 8th line
-            data_length = int(
-                re.search(r'(?<=A/D Data length =)\d+', lines[7]).group())
-            # match int after 'Sample Rate =\s' in the 8th line
-            sample_rate = int(
-                re.search(r'(?<=Sample Rate =\s)\d+', lines[7]).group())
+            try:
+                # match int after 'A/D Data length\s=' in the 8th line
+                data_length = int(
+                    re.search(r'(?<=A/D Data length =)\d+', lines[7]).group())
+                # match int after 'Sample Rate =\s' in the 8th line
+                sample_rate = int(
+                    re.search(r'(?<=Sample Rate =\s)\d+', lines[7]).group())
+            except AttributeError:
+                # match int after 'A/D Data length\s=' in the 8th line
+                data_length = int(
+                    re.search(r'(?<=A/D Data length =)\d+', lines[13]).group())
+                # match int after 'Sample Rate =\s' in the 8th line
+                sample_rate = int(
+                    re.search(r'(?<=Sample Rate =\s)\d+', lines[13]).group())
             return {'Nx': Nx,
                     'Ny': Ny,
                     'dx': dx,
