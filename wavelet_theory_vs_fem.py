@@ -133,6 +133,6 @@ if not os.path.exists(save_dir):
 fig.savefig(
     os.path.join(
         save_dir,
-        config.FEM_DATA_FILENAME.split('.')[0]+'.png'
+        config.FEM_DATA_FILENAME.replace('.csv', '')+'.png'
     )
 )
