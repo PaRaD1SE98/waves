@@ -19,6 +19,8 @@ match DATA_SOURCE:
         from prepare.real import fft, data, mask, abs_fft_masked, ifft_data
     case 'simulation':
         from prepare.sim import fft, data, mask, abs_fft_masked, ifft_data
+    case 'fem':
+        from prepare.fem import fft, data, mask, abs_fft_masked, ifft_data
 
 """plot data with 2 backends"""
 

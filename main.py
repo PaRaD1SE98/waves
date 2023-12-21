@@ -28,4 +28,4 @@
 from plot_functions import *
 
 if __name__ == '__main__':
-    ofxfy()
+    of3d()
