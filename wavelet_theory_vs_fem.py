@@ -64,7 +64,7 @@ load posision should be -4 ~ -2 and 2 ~ 4
 """
 
 sampling_freq = 1/dt  # Hz
-data_path = os.path.join(config.DATA_BASE_DIR, f'{data_filename}.csv')
+data_path = os.path.join(config.DATA_BASE_DIR, config.FEM_DATA_FILENAME)
 df = lsdyna_read_pd(data_path)
 input_data = df[f'Sh-{shell_id}']
 print(input_data.shape)
@@ -125,8 +125,14 @@ plt.tight_layout()
 plt.show()
 
 # save figure
-save_dir = os.path.join(config.DATA_BASE_DIR, 'results',
+save_dir = os.path.join(config.DATA_BASE_DIR, 
+                        'results',
                         'wavelet_theory_vs_fem')
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
-fig.savefig(os.path.join(save_dir, f'{data_filename}.png'))
+fig.savefig(
+    os.path.join(
+        save_dir,
+        config.FEM_DATA_FILENAME.split('.')[0]+'.png'
+    )
+)

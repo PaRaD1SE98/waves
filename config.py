@@ -60,14 +60,14 @@ SIMULATION_TYPE = 'wave'
 # DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.90.0.90.s-90'
 # DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.90.0.90.s-0'
 # fem
-# DATA_BASE_DIR = 'data/li/2023-12-10/90.90.0.0.s'
-DATA_BASE_DIR = 'data/li/2023-12-10/90.0.90.0.s'
+DATA_BASE_DIR = 'data/li/2023-12-10/90.90.0.0.s'
+# DATA_BASE_DIR = 'data/li/2023-12-10/90.0.90.0.s'
 # DATA_BASE_DIR = 'data/li/2023-12-10/0.0.90.90.s'
 
 # FEM output file name
 # FEM_DATA_FILENAME = 'data.csv'
-FEM_DATA_FILENAME = 'data-left-upper-1.5.csv' # for [0-0-90-90]s
-# FEM_DATA_FILENAME = 'data-left-lower-3.csv' # for [90-90-0-0]s
+# FEM_DATA_FILENAME = 'data-left-upper-1.5.csv' # for [0-0-90-90]s
+FEM_DATA_FILENAME = 'data-left-lower-3.csv' # for [90-90-0-0]s
 
 
 # Down sampling

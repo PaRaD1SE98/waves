@@ -41,7 +41,7 @@ data_dir, degree, suffix, title = match_exp()
 df_0_S = pd.read_csv(base_dir+data_dir+degree+f'_S{suffix}.txt')
 df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
 
-distance_to_pzt = 0.015 + index*data.sample_props.dx # m
+distance_to_pzt = 0.015 + index*data.sample_props.dx  # m
 x_multiplyer = 1e-3  # MHz
 y_multiplyer = 1e3  # us
 ax.plot(df_0_S['S0 f (kHz)']*x_multiplyer, distance_to_pzt /
@@ -64,8 +64,14 @@ plt.tight_layout()
 plt.show()
 
 # save figure
-save_dir = os.path.join(config.DATA_BASE_DIR, 'results',
+save_dir = os.path.join(config.DATA_BASE_DIR,
+                        'results',
                         'wavelet_theory_vs_exp')
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
-fig.savefig(os.path.join(save_dir, f'{data_dir[:-1]}-{degree}.png'))
+fig.savefig(
+    os.path.join(
+        save_dir,
+        f'{data_dir[:-1]}-{degree}.png'
+    )
+)

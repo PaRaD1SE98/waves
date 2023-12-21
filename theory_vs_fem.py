@@ -1,3 +1,5 @@
+import os
+import config
 import numpy as np
 import matplotlib.pyplot as plt
 from common.utils import to_idx
@@ -74,9 +76,9 @@ ax.plot(df_0_S['S1 Wavenumber (rad/mm)'],
 ax.plot(df_0_S['S2 Wavenumber (rad/mm)'],
         df_0_S['S2 f (kHz)'], '--', label='S2', color='purple')
 
-ax.plot(df_0_A['A0 Wavenumber (rad/mm)'], 
+ax.plot(df_0_A['A0 Wavenumber (rad/mm)'],
         df_0_A['A0 f (kHz)'], label='A0', color='red')
-ax.plot(df_0_A['A1 Wavenumber (rad/mm)'], 
+ax.plot(df_0_A['A1 Wavenumber (rad/mm)'],
         df_0_A['A1 f (kHz)'], label='A1', color='green')
 plt.legend(loc='upper right')
 # plt.xlabel('Kx(1/m)')
@@ -86,3 +88,16 @@ plt.xlim(0, 500)
 plt.ylim(0, 2e6)
 plt.tight_layout()
 plt.show()
+
+# save figure
+save_dir = os.path.join(config.DATA_BASE_DIR, 
+                        'results',
+                        'theory_vs_fem')
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+fig.savefig(
+    os.path.join(
+        save_dir,
+        config.FEM_DATA_FILENAME.split('.')[0]+'.png'
+    )
+)
