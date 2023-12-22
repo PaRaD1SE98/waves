@@ -1,14 +1,17 @@
 import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pywt
-import config
 
+import config
 from prepare.real import data
 from theory_curve_matcher import match_exp
 
-print(data.z.shape)
+d_from_edge_to_point = 0.0  # m distance from scan edge to point
+d_from_sensor_to_edge = 0.02  # m distance from sensor to the closest scan edge
+
 sampling_freq = data.sample_props.sft
 freq_start = 10000
 freq_end = sampling_freq//2
@@ -18,8 +21,24 @@ normalized_freqs = freqs/sampling_freq
 wavelet = 'cmor1.5-1.0'
 scales = pywt.frequency2scale(wavelet, normalized_freqs)
 
-index = 205
-input_data = data.z[index, data.z.shape[1]//2, :]
+total_distance = (data.z.shape[0]-1) * data.sample_props.dx  # m
+print('total_distance', total_distance, 'm')
+
+
+def get_index_by_distance(distance):
+    """
+    distance: m
+    """
+    assert distance <= total_distance
+    # larger distance means smaller index
+    return data.z.shape[0] - 1 - int(distance / data.sample_props.dx)
+
+
+index = get_index_by_distance(d_from_edge_to_point)  # data index
+print('index', index)
+input_data = data.z[index, data.z.shape[1]//2, :]  # (x, y, t)
+plt.plot(input_data)
+plt.show()
 sig_length = input_data.shape[0]
 sampling_period = data.sample_props.dt
 t = sampling_period * sig_length
@@ -40,8 +59,8 @@ data_dir, degree, suffix, title = match_exp()
 
 df_0_S = pd.read_csv(base_dir+data_dir+degree+f'_S{suffix}.txt')
 df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
-
-distance_to_pzt = 0.015 + index*data.sample_props.dx  # m
+distance_to_pzt = d_from_sensor_to_edge + d_from_edge_to_point  # m
+title += f' EXP {distance_to_pzt*1e3:.1f}mm'
 x_multiplyer = 1e-3  # MHz
 y_multiplyer = 1e3  # us
 ax.plot(df_0_S['S0 f (kHz)']*x_multiplyer, distance_to_pzt /
@@ -72,6 +91,6 @@ if not os.path.exists(save_dir):
 fig.savefig(
     os.path.join(
         save_dir,
-        f'{data_dir[:-1]}-{degree}.png'
+        f'{data_dir[:-1]}-{degree}-{distance_to_pzt*1e3:.1f}mm.png'
     )
 )

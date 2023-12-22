@@ -13,55 +13,24 @@ from theory_curve_matcher import match_fem
 dx = 0.1  # mm
 dy = 0.025  # mm
 dt = 1e-7  # s
-shell_id = 85676  # "sensor" position upper right half
-# distance_to_source = 51.0992  # mm
-distance_to_source = 30  # mm lower left verify source location
-data_filename = 'data-left-upper-1.5'
 
-"""
-LOADING NODES ID
+# for source position in the left edge
+# shell_id = 85676  # "sensor" position upper left
+# distance_to_source = 32.399  # mm lower left verify source location
+# for source position in the middle
+shell_id = 84750  # "sensor" position upper right 1/4
+distance_to_source = 25  # mm
+# shell_id = 84620  # "sensor" position upper right 3/8
+# distance_to_source = 37.5  # mm
+shell_id = 84500  # "sensor" position upper right half
+distance_to_source = 50  # mm
+# shell_id = 84250  # "sensor" position upper right 3/4
+# distance_to_source = 75  # mm
+# shell_id = 84125  # "sensor" position upper right 7/8
+# distance_to_source = 87.5  # mm
+# shell_id = 84001  # "sensor" position upper right edge
+# distance_to_source = 100  # mm
 
-middle upper 4     layer:  99072, 99071
-middle upper 3.5   layer: 105075, 105074
-middle upper 3     layer:  85065, 85064
-middle upper 2.5   layer:  91068, 91067
-middle upper 2     layer:  71058, 71057
-middle upper 1.5   layer:  77061, 77060
-middle upper 1     layer:  57051, 57050
-middle upper 0.5   layer:  63054, 63053
-middle center      layer:  43044, 43043
-middle lower 0.5   layer:  49047, 49046
-middle lower 1     layer:  29037, 29036
-middle lower 1.5   layer:  35040, 35039
-middle lower 2     layer:  15030, 15029
-middle lower 2.5   layer:  21033, 21032
-middle lower 3     layer:   1023, 1022
-middle lower 3.5   layer:   7026, 7025
-middle lower 4     layer:  13029, 13028
-
-left upper 4   layer: 100050
-left upper 3.5 layer: 106053
-left upper 3   layer: 86043
-left upper 2.5 layer: 92046
-left upper 2   layer: 72036
-left upper 1.5 layer: 78039
-left upper 1   layer: 58029
-left upper 0.5 layer: 64032
-left center    layer: 44022
-left lower 0.5 layer: 50025
-left lower 1   layer: 30015
-left lower 1.5 layer: 36018
-left lower 2   layer: 16008
-left lower 2.5 layer: 22011
-left lower 3   layer:  2001
-left lower 3.5 layer:  8004
-left lower 4   layer: 14007
-
-in [0/0/90/90]s
-load posision should be -2 ~ 2
-in [90/90/0/0]s
-load posision should be -4 ~ -2 and 2 ~ 4
-"""
 
 sampling_freq = 1/dt  # Hz
 data_path = os.path.join(config.DATA_BASE_DIR, config.FEM_DATA_FILENAME)
@@ -97,7 +66,7 @@ base_dir = 'data/li/disp_calc/'
 
 data_dir, degree, suffix, title = match_fem()
 
-title += ' FEM'
+title += f' FEM {distance_to_source:.1f}mm'
 
 df_0_S = pd.read_csv(base_dir+data_dir+degree+f'_S{suffix}.txt')
 df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
@@ -125,7 +94,7 @@ plt.tight_layout()
 plt.show()
 
 # save figure
-save_dir = os.path.join(config.DATA_BASE_DIR, 
+save_dir = os.path.join(config.DATA_BASE_DIR,
                         'results',
                         'wavelet_theory_vs_fem')
 if not os.path.exists(save_dir):
@@ -133,6 +102,7 @@ if not os.path.exists(save_dir):
 fig.savefig(
     os.path.join(
         save_dir,
-        config.FEM_DATA_FILENAME.replace('.csv', '')+'.png'
+        config.FEM_DATA_FILENAME.replace(
+            '.csv', '')+f'-{distance_to_source}mm'+'.png'
     )
 )

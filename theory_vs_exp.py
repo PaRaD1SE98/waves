@@ -1,3 +1,5 @@
+import os
+import config
 import numpy as np
 import matplotlib.pyplot as plt
 from common.utils import to_idx
@@ -42,6 +44,7 @@ def convert_khz_to_hz(x):
 base_dir = 'data/li/disp_calc/'
 
 data_dir, degree, suffix, title = match_exp()
+title += ' EXP'
 
 df_0_S = pd.read_csv(base_dir+data_dir+degree+f'_S{suffix}.txt')
 df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
@@ -84,3 +87,16 @@ plt.xlim(0, 500)
 plt.ylim(0, 2e6)
 plt.tight_layout()
 plt.show()
+
+# save figure
+save_dir = os.path.join(config.DATA_BASE_DIR,
+                        'results',
+                        'theory_vs_fem')
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+fig.savefig(
+    os.path.join(
+        save_dir,
+        f'{data_dir[:-1]}-{degree}.png'
+    )
+)
