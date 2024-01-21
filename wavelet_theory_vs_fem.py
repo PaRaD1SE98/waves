@@ -16,19 +16,26 @@ dt = 1e-7  # s
 
 # for source position in the left edge
 # shell_id = 85676  # "sensor" position upper left
+# shell_lower_id = 11676
 # distance_to_source = 32.399  # mm lower left verify source location
 # for source position in the middle
 shell_id = 84750  # "sensor" position upper right 1/4
+shell_lower_id = 10750
 distance_to_source = 25  # mm
 # shell_id = 84620  # "sensor" position upper right 3/8
+# shell_lower_id = 10620
 # distance_to_source = 37.5  # mm
-shell_id = 84500  # "sensor" position upper right half
-distance_to_source = 50  # mm
+# shell_id = 84500  # "sensor" position upper right half
+# shell_lower_id = 10500
+# distance_to_source = 50  # mm
 # shell_id = 84250  # "sensor" position upper right 3/4
+# shell_lower_id = 10250
 # distance_to_source = 75  # mm
 # shell_id = 84125  # "sensor" position upper right 7/8
+# shell_lower_id = 10125
 # distance_to_source = 87.5  # mm
 # shell_id = 84001  # "sensor" position upper right edge
+# shell_lower_id = 10001
 # distance_to_source = 100  # mm
 
 
@@ -36,9 +43,41 @@ sampling_freq = 1/dt  # Hz
 data_path = os.path.join(config.DATA_BASE_DIR, config.FEM_DATA_FILENAME)
 df = lsdyna_read_pd(data_path)
 input_data = df[f'Sh-{shell_id}']
+input_data_lower = df[f'Sh-{shell_lower_id}']
+input_data_diff = input_data - input_data_lower*.01
+input_data_sum = input_data + input_data_lower
+
+# input_data = input_data_lower
+
+# # do fft
+# fft = np.fft.fft(input_data)
+# fft = fft[:fft.shape[0]//2]
+# # smoothly cut off the fft larger than 1.1MHz
+# fft[int(2.7e6*dt*fft.shape[0]):] = 0
+# # # construct the other half of the fft
+# fft = np.concatenate((fft, np.flip(fft)))
+# # # ifft
+# input_data = np.fft.ifft(fft)
+# # plot fft
+# plt.plot(np.abs(fft))
+# plt.show()
+
+# gpt method
+# plt.plot(input_data)
+# fft = np.fft.fft(input_data)
+# adjustment_factor = np.linspace(0.5, 2, len(fft))
+# fft = fft * adjustment_factor
+# input_data = np.fft.ifft(fft)
+# plt.plot(input_data)
+# plt.show()
+
+
+
 print(input_data.shape)
-plt.plot(input_data)
-plt.show()
+
+base_dir = 'data/li/disp_calc/'
+data_dir, degree, suffix, title = match_fem()
+title += f' FEM {distance_to_source:.1f}mm'
 
 freq_start = 10000
 freq_end = sampling_freq//2
@@ -53,6 +92,13 @@ sampling_period = dt
 t = sampling_period * sig_length
 time = np.linspace(0, t, sig_length)
 time *= 1e6  # in us
+
+plt.plot(time, input_data)
+plt.xlabel('Time (us)')
+plt.ylabel('Amplitude')
+plt.title(title)
+plt.show()
+
 cwtmatr, freqs = pywt.cwt(input_data, scales, wavelet, sampling_period)
 freqs *= 1e-6  # in MHz
 X, Y = np.meshgrid(freqs, time)
@@ -62,11 +108,6 @@ ax = fig.add_subplot()
 img = ax.pcolormesh(X, Y, np.abs(cwtmatr).T, cmap='viridis')
 fig.colorbar(img)
 
-base_dir = 'data/li/disp_calc/'
-
-data_dir, degree, suffix, title = match_fem()
-
-title += f' FEM {distance_to_source:.1f}mm'
 
 df_0_S = pd.read_csv(base_dir+data_dir+degree+f'_S{suffix}.txt')
 df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
@@ -74,21 +115,21 @@ df_0_A = pd.read_csv(base_dir+data_dir+degree+f'_A{suffix}.txt')
 distance_to_pzt = distance_to_source * 1e-3  # m
 x_multiplyer = 1e-3  # MHz
 y_multiplyer = 1e3  # us
-ax.plot(df_0_S['S0 f (kHz)']*x_multiplyer, distance_to_pzt /
-        df_0_S['S0 Energy velocity (m/ms)']*y_multiplyer, '--', label='S0', color='blue')
-ax.plot(df_0_S['S1 f (kHz)']*x_multiplyer, distance_to_pzt /
-        df_0_S['S1 Energy velocity (m/ms)']*y_multiplyer, '--', label='S1', color='orange')
-ax.plot(df_0_S['S2 f (kHz)']*x_multiplyer, distance_to_pzt /
-        df_0_S['S2 Energy velocity (m/ms)']*y_multiplyer, '--', label='S2', color='purple')
-ax.plot(df_0_A['A0 f (kHz)']*x_multiplyer, distance_to_pzt /
-        df_0_A['A0 Energy velocity (m/ms)']*y_multiplyer, label='A0', color='red')
-ax.plot(df_0_A['A1 f (kHz)']*x_multiplyer, distance_to_pzt /
-        df_0_A['A1 Energy velocity (m/ms)']*y_multiplyer, label='A1', color='green')
-plt.legend(loc='upper right')
+# ax.plot(df_0_S['S0 f (kHz)']*x_multiplyer, distance_to_pzt /
+#         df_0_S['S0 Energy velocity (m/ms)']*y_multiplyer, '--', label='S0', color='blue')
+# # ax.plot(df_0_S['S1 f (kHz)']*x_multiplyer, distance_to_pzt /
+# #         df_0_S['S1 Energy velocity (m/ms)']*y_multiplyer, '--', label='S1', color='orange')
+# # ax.plot(df_0_S['S2 f (kHz)']*x_multiplyer, distance_to_pzt /
+# #         df_0_S['S2 Energy velocity (m/ms)']*y_multiplyer, '--', label='S2', color='purple')
+# ax.plot(df_0_A['A0 f (kHz)']*x_multiplyer, distance_to_pzt /
+#         df_0_A['A0 Energy velocity (m/ms)']*y_multiplyer, label='A0', color='red')
+# ax.plot(df_0_A['A1 f (kHz)']*x_multiplyer, distance_to_pzt /
+#         df_0_A['A1 Energy velocity (m/ms)']*y_multiplyer, label='A1', color='green')
+# plt.legend(loc='upper right')
 plt.xlabel('Frequency (MHz)')
 plt.ylabel('Arrival Time (us)')
 plt.title(title)
-plt.xlim(0, 1.75)
+plt.xlim(0.1, 1.75)
 plt.ylim(0, 150)
 plt.tight_layout()
 plt.show()

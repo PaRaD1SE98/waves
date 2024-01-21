@@ -99,12 +99,12 @@ load posision should be -4 ~ -2 and 2 ~ 4
 # DATA_BASE_DIR = 'data/li/disp_verify/90.0.90.0.s'
 # DATA_BASE_DIR = 'data/li/disp_verify/0.90.0.90.s'
 # exp
-# DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.0.90.90.s-90'
+DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.0.90.90.s-90'
 # DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.0.90.90.s-0'
 # DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.90.0.90.s-90'
 # DATA_BASE_DIR = 'data/li/2023-06-28-AE504S/0.90.0.90.s-0'
 # fem
-DATA_BASE_DIR = 'data/li/2023-12-10-FEM/90.90.0.0.s'
+# DATA_BASE_DIR = 'data/li/2023-12-10-FEM/90.90.0.0.s'
 # DATA_BASE_DIR = 'data/li/2023-12-10-FEM/90.0.90.0.s'
 # DATA_BASE_DIR = 'data/li/2023-12-10-FEM/0.0.90.90.s'
 # DATA_BASE_DIR = 'data/li/2023-12-10-FEM/0.90.0.90.s'
@@ -115,8 +115,10 @@ DATA_BASE_DIR = 'data/li/2023-12-10-FEM/90.90.0.0.s'
 
 # FEM_DATA_FILENAME = 'data-left-lower-3.csv' # for [90-90-0-0]s
 # FEM_DATA_FILENAME = 'data-left-lower-1.csv' # for [0-0-90-90]s
-# FEM_DATA_FILENAME = 'data-middle-lower-1.csv' # for [0-0-90-90]s
-FEM_DATA_FILENAME = 'data-middle-lower-3.csv'  # for [90-90-0-0]s
+FEM_DATA_FILENAME = 'data-middle-lower-1.csv' # for [0-0-90-90]s
+# FEM_DATA_FILENAME = 'data-middle-lower-1-selected-only.csv'  # for [0-0-90-90]s
+# FEM_DATA_FILENAME = 'data-middle-lower-3.csv'  # for [90-90-0-0]s
+# FEM_DATA_FILENAME = 'data-middle-lower-3-selected-only.csv'  # for [90-90-0-0]s
 
 
 # Down sampling
